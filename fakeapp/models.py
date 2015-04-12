@@ -14,6 +14,23 @@ class BigIntegerFieldModel(models.Model):
         validators.MaxValueValidator(15)
     ])
 
+    def __repr__(self):
+        return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
+            cls=self.__class__.__name__, pk=self.pk, field=self.field,
+        )
+
+
+class NullBigIntegerFieldModel(models.Model):
+    field = strict.StrictBigIntegerField(validators=[
+        validators.MinValueValidator(5),
+        validators.MaxValueValidator(15)
+    ], null=True, blank=True)
+
+    def __repr__(self):
+        return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
+            cls=self.__class__.__name__, pk=self.pk, field=self.field,
+        )
+
 
 
 class BinaryFieldModel(models.Model):
@@ -22,7 +39,12 @@ class BinaryFieldModel(models.Model):
 
 
 class BooleanFieldModel(models.Model):
-    field = models.BooleanField()
+    field = strict.StrictBooleanField(default=True)
+
+    def __repr__(self):
+        return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
+            cls=self.__class__.__name__, pk=self.pk, field=self.field,
+        )
 
 
 
