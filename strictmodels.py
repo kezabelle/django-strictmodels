@@ -22,6 +22,13 @@ class FieldCleaningDescriptor(object):
         instance.__dict__[self.field.name] = new_value
         return new_value
 
+    def __repr__(self):
+        return "<{mod!s}.{cls!s} field='{field!s}'>".format(
+            mod=self.__class__.__module__, cls=self.__class__.__name__,
+            field='.'.join((self.field.__class__.__module__,
+                            self.field.__class__.__name__)),
+        )
+
 
 
 class StrictBigIntegerField(fields.BigIntegerField):

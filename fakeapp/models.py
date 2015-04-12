@@ -49,7 +49,7 @@ class BooleanFieldModel(models.Model):
 
 
 class CharFieldModel(models.Model):
-    field = models.CharField(max_length=255)
+    field = strict.StrictCharField(max_length=255, blank=False)
 
 
 
