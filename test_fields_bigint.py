@@ -18,6 +18,20 @@ def test_StrictBigIntegerField_null():
 
 
 @pytest.mark.django_db
+def test_StrictBigIntegerField_nullable():
+    """
+    Cannot be null
+    """
+    models.NullBigIntegerFieldModel(field=None)
+    models.NullBigIntegerFieldModel()
+    with pytest.raises(ValidationError):
+        models.NullBigIntegerFieldModel(field=1)
+    with pytest.raises(ValidationError):
+        models.NullBigIntegerFieldModel(field=16)
+    models.NullBigIntegerFieldModel(field=5)
+
+
+@pytest.mark.django_db
 def test_StrictBigIntegerField_string():
     """
     Cannot be null
