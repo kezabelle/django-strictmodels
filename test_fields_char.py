@@ -18,6 +18,26 @@ def test_StrictCharField_no_args():
         value = models.CharFieldModel()
 
 
+
+
+@pytest.mark.django_db
+def test_StrictBigIntegerField_descriptor_doesnt_disappear():
+    """
+    don't clobber the descriptor
+    """
+    value = models.CharFieldModel(field='t')
+    assert value.field == 't'
+    value.field = 't'*255
+    assert value.field == 't'*255
+    with pytest.raises(ValidationError):
+        value.field = 'v'*256
+    assert value.field == 't'*255
+    value.field = 'z'*10
+    assert value.field == 'z'*10
+    with pytest.raises(ValidationError):
+        value.field = None
+
+
 @pytest.mark.django_db
 def test_StrictCharField_values():
     """

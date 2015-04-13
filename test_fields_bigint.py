@@ -18,6 +18,22 @@ def test_StrictBigIntegerField_null():
 
 
 @pytest.mark.django_db
+def test_StrictBigIntegerField_descriptor_doesnt_disappear():
+    """
+    don't clobber the descriptor
+    """
+    value = models.BigIntegerFieldModel(field=5)
+    assert value.field == 5
+    value.field = 15
+    assert value.field == 15
+    with pytest.raises(ValidationError):
+        value.field = 16
+    assert value.field == 15
+    value.field = 12
+    assert value.field == 12
+
+
+@pytest.mark.django_db
 def test_StrictBigIntegerField_nullable():
     """
     Cannot be null
