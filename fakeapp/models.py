@@ -69,7 +69,7 @@ class DateTimeFieldModel(models.Model):
 
 
 class DecimalFieldModel(models.Model):
-    field = models.DecimalField()
+    field = models.DecimalField(max_digits=5, decimal_places=3)
 
 
 
