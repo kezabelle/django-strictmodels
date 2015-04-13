@@ -18,6 +18,22 @@ def test_StrictBooleanField_default():
 
 
 @pytest.mark.django_db
+def test_StrictBooleanField_descriptor_doesnt_disappear():
+    """
+    don't clobber the descriptor
+    """
+    value = models.BooleanFieldModel()
+    assert value.field == True
+    for x in range(1, 3):
+        value.field = False
+        assert value.field == False
+        with pytest.raises(ValidationError):
+            value.field = 'ghost'
+        value.field = True
+    assert value.field == True
+
+
+@pytest.mark.django_db
 def test_StrictBooleanField_trues():
     """
     Cannot be null
