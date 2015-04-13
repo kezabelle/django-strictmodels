@@ -35,3 +35,10 @@ Or, for a full test::
 
     tox
 
+Test status
+-----------
+
+.. image:: https://travis-ci.org/kezabelle/django-strictmodels.svg?branch=master
+  :target: https://travis-ci.org/kezabelle/django-strictmodels
+
+I'd expect nothing but failure, right now.
