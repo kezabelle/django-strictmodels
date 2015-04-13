@@ -18,11 +18,20 @@ I'm hoping this will end up being workable::
         a = strict.PositiveIntegerField()
         b = nonstrict.PositiveIntegerField()
 
-And then::
+Note that this model is a combination of strict and normal model fields,
+which would allow for gradual hardening::
 
     >>> instance = MyModel(a=1, b=2)
     >>> instance2 = MyModel(a='test', b=2)
     ValidationError: "'test' value must be an integer."
+
+Because ``a`` is cleaned on assignment, we receive a handy error, just like
+with forms. Meanwhile, doing the following would not raise an error,
+because ``b`` is a normal Django field::
+
+    >>> instance3 = MyModel(a=1, b='test')
+
+At least not at *that* point.
 
 Running the tests
 -----------------
