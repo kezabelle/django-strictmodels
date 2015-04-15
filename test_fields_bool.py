@@ -4,8 +4,10 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
 from django.core.exceptions import ValidationError
+from model_mommy.mommy import Mommy
 import pytest
 from fakeapp import models
+from strictmodels import MODEL_MOMMY_MAPPING
 
 
 @pytest.mark.django_db
@@ -15,6 +17,14 @@ def test_StrictBooleanField_default():
     """
     value = models.BooleanFieldModel()
     assert value.field == True
+
+
+@pytest.mark.django_db
+def test_StrictBooleanField_mommy():
+    mommy = Mommy(model=models.BooleanFieldModel)
+    mommy.type_mapping.update(**MODEL_MOMMY_MAPPING)
+    mommy.prepare()
+    mommy.make()
 
 
 @pytest.mark.django_db

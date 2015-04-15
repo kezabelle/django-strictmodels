@@ -56,6 +56,7 @@ setup(
         'pytest-cov>=1.8.1',
         'pytest-django>=2.8.0',
         'tox>=1.9.0',
+        'model-mommy>=1.2.4',
     ),
     cmdclass = {'test': PyTest},
     author='Keryn Knight',

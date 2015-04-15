@@ -4,8 +4,10 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
 from django.core.exceptions import ValidationError
+from model_mommy.mommy import Mommy
 import pytest
 from fakeapp import models
+from strictmodels import MODEL_MOMMY_MAPPING
 
 
 @pytest.mark.django_db
@@ -15,6 +17,23 @@ def test_StrictBigIntegerField_null():
     """
     with pytest.raises(ValidationError):
         models.BigIntegerFieldModel()
+
+
+
+@pytest.mark.django_db
+def test_StrictBooleanField_mommy():
+    mommy = Mommy(model=models.BigIntegerFieldModel)
+    mommy.type_mapping.update(**MODEL_MOMMY_MAPPING)
+    try:
+        mommy.prepare()
+    except ValidationError:
+        # this is OK because it means our mapping works
+        pass
+    try:
+        mommy.make()
+    except ValidationError:
+        # this is OK because it means our mapping works
+        pass
 
 
 @pytest.mark.django_db

@@ -161,3 +161,15 @@ class StrictURLField(fields.URLField):
     def contribute_to_class(self, cls, name, **kwargs):
         super(StrictURLField, self).contribute_to_class(cls, name, **kwargs)
         setattr(cls, self.name, FieldCleaningDescriptor(self))
+
+
+try:
+    from model_mommy import generators
+except ImportError:  # model_mommy is not installed
+    MODEL_MOMMY_MAPPING = {}
+else:
+    MODEL_MOMMY_MAPPING = {
+        StrictBooleanField: generators.gen_boolean,
+        StrictBigIntegerField: generators.gen_integer,
+        StrictCharField: generators.gen_string,
+    }
