@@ -51,12 +51,19 @@ class BooleanFieldModel(models.Model):
 class CharFieldModel(models.Model):
     field = strict.StrictCharField(max_length=255, blank=False)
 
+    def __repr__(self):
+        return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
+            cls=self.__class__.__name__, pk=self.pk, field=self.field,
+        )
 
 
 class CommaSeparatedIntegerFieldModel(models.Model):
-    field = models.CommaSeparatedIntegerField(max_length=255)
+    field = strict.StrictCommaSeparatedIntegerField(max_length=255)
 
-
+    def __repr__(self):
+        return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
+            cls=self.__class__.__name__, pk=self.pk, field=self.field,
+        )
 
 class DateFieldModel(models.Model):
     field = models.DateField()
