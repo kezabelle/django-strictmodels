@@ -22,7 +22,7 @@ def test_StrictBooleanField_default():
 @pytest.mark.django_db
 def test_StrictBooleanField_mommy():
     mommy = Mommy(model=models.BooleanFieldModel)
-    mommy.type_mapping.update(**MODEL_MOMMY_MAPPING)
+    mommy.type_mapping.update(MODEL_MOMMY_MAPPING)
     mommy.prepare()
     mommy.make()
 
