@@ -66,7 +66,7 @@ class CommaSeparatedIntegerFieldModel(models.Model):
         )
 
 class DateFieldModel(models.Model):
-    field = models.DateField()
+    field = strict.StrictDateField()
 
 
 

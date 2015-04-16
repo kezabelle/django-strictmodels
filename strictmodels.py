@@ -172,4 +172,6 @@ else:
         StrictBooleanField: generators.gen_boolean,
         StrictBigIntegerField: generators.gen_integer,
         StrictCharField: generators.gen_string,
+        StrictDateField: generators.gen_date,
+        StrictDateTimeField: generators.gen_datetime,
     }
