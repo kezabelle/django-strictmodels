@@ -21,7 +21,7 @@ def test_StrictBigIntegerField_null():
 
 
 @pytest.mark.django_db
-def test_StrictBooleanField_mommy():
+def test_StrictBigIntegerField_mommy():
     mommy = Mommy(model=models.BigIntegerFieldModel)
     mommy.type_mapping.update(MODEL_MOMMY_MAPPING)
     try:
