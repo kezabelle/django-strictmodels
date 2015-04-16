@@ -21,8 +21,8 @@ def test_StrictCharField_no_args():
 
 
 @pytest.mark.django_db
-def test_StrictBooleanField_mommy():
-    mommy = Mommy(model=models.BooleanFieldModel)
+def test_StrictCharField_mommy():
+    mommy = Mommy(model=models.CharFieldModel)
     mommy.type_mapping.update(MODEL_MOMMY_MAPPING)
     mommy.prepare()
     mommy.make()
