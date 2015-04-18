@@ -23,7 +23,7 @@ def test_StrictDateField_no_args():
 @pytest.mark.django_db
 def test_StrictDateField_mommy():
     mommy = Mommy(model=models.DateFieldModel)
-    mommy.type_mapping.update(**MODEL_MOMMY_MAPPING)
+    mommy.type_mapping.update(MODEL_MOMMY_MAPPING)
     mommy.prepare()
     mommy.make()
 
