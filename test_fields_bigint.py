@@ -6,7 +6,7 @@ from __future__ import division
 from django.core.exceptions import ValidationError
 from model_mommy.mommy import Mommy
 import pytest
-from fakeapp import models
+from fakeapp.models import BigIntegerFieldModel, NullBigIntegerFieldModel
 from strictmodels import MODEL_MOMMY_MAPPING
 
 
@@ -16,13 +16,13 @@ def test_StrictBigIntegerField_null():
     Cannot be null
     """
     with pytest.raises(ValidationError):
-        models.BigIntegerFieldModel()
+        BigIntegerFieldModel()
 
 
 
 @pytest.mark.django_db
 def test_StrictBigIntegerField_mommy():
-    mommy = Mommy(model=models.BigIntegerFieldModel)
+    mommy = Mommy(model=BigIntegerFieldModel)
     mommy.type_mapping.update(MODEL_MOMMY_MAPPING)
     try:
         mommy.prepare()
@@ -41,7 +41,7 @@ def test_StrictBigIntegerField_descriptor_doesnt_disappear():
     """
     don't clobber the descriptor
     """
-    value = models.BigIntegerFieldModel(field=5)
+    value = BigIntegerFieldModel(field=5)
     assert value.field == 5
     value.field = 15
     assert value.field == 15
@@ -57,13 +57,13 @@ def test_StrictBigIntegerField_nullable():
     """
     Cannot be null
     """
-    models.NullBigIntegerFieldModel(field=None)
-    models.NullBigIntegerFieldModel()
+    NullBigIntegerFieldModel(field=None)
+    NullBigIntegerFieldModel()
     with pytest.raises(ValidationError):
-        models.NullBigIntegerFieldModel(field=1)
+        NullBigIntegerFieldModel(field=1)
     with pytest.raises(ValidationError):
-        models.NullBigIntegerFieldModel(field=16)
-    models.NullBigIntegerFieldModel(field=5)
+        NullBigIntegerFieldModel(field=16)
+    NullBigIntegerFieldModel(field=5)
 
 
 @pytest.mark.django_db
@@ -72,7 +72,7 @@ def test_StrictBigIntegerField_string():
     Cannot be null
     """
     with pytest.raises(ValidationError):
-        models.BigIntegerFieldModel(field='aaaa')
+        BigIntegerFieldModel(field='aaaa')
 
 
 @pytest.mark.django_db
@@ -81,7 +81,7 @@ def test_StrictBigIntegerField_minvalue():
     Ensure this value is greater than or equal to 5
     """
     with pytest.raises(ValidationError):
-        models.BigIntegerFieldModel(field=1)
+        BigIntegerFieldModel(field=1)
 
 
 @pytest.mark.django_db
@@ -90,12 +90,12 @@ def test_StrictBigIntegerField_maxvalue():
     Ensure this value is less than or equal to 15
     """
     with pytest.raises(ValidationError):
-        models.BigIntegerFieldModel(field=16)
+        BigIntegerFieldModel(field=16)
 
 
 @pytest.mark.django_db
 def test_StrictBigIntegerField_ok():
-    model4 = models.BigIntegerFieldModel(field=15)
+    model4 = BigIntegerFieldModel(field=15)
     assert model4.field == 15
 
 
@@ -104,7 +104,7 @@ def test_StrictBigIntegerField_ok_until_changed():
     """
     Ensure this value is less than or equal to 15.
     """
-    model5 = models.BigIntegerFieldModel(field=15)
+    model5 = BigIntegerFieldModel(field=15)
     assert model5.field == 15
     with pytest.raises(ValidationError):
         model5.field = 16
@@ -115,10 +115,10 @@ def test_StrictBigIntegerField_create_via_queryset():
     """
     Ensure this value is less than or equal to 15.
     """
-    assert models.BigIntegerFieldModel.objects.count() == 0
+    assert BigIntegerFieldModel.objects.count() == 0
     with pytest.raises(ValidationError):
-        models.BigIntegerFieldModel.objects.create(field=16)
-    assert models.BigIntegerFieldModel.objects.count() == 0
+        BigIntegerFieldModel.objects.create(field=16)
+    assert BigIntegerFieldModel.objects.count() == 0
 
 
 @pytest.mark.django_db
@@ -126,7 +126,7 @@ def test_StrictBigIntegerField_update_via_queryset_invalid_then_get():
     """
     Ensure this value is less than or equal to 15.
     """
-    model = models.BigIntegerFieldModel.objects.create(field=15)
+    model = BigIntegerFieldModel.objects.create(field=15)
     model.__class__.objects.filter(pk=model.pk).update(field=16)
     with pytest.raises(ValidationError):
         model.__class__.objects.get(pk=model.pk)

@@ -6,7 +6,7 @@ from __future__ import division
 from django.core.exceptions import ValidationError
 from model_mommy.mommy import Mommy
 import pytest
-from fakeapp import models
+from fakeapp.models import BooleanFieldModel
 from strictmodels import MODEL_MOMMY_MAPPING
 
 
@@ -15,13 +15,13 @@ def test_StrictBooleanField_default():
     """
     Default is null
     """
-    value = models.BooleanFieldModel()
+    value = BooleanFieldModel()
     assert value.field == True
 
 
 @pytest.mark.django_db
 def test_StrictBooleanField_mommy():
-    mommy = Mommy(model=models.BooleanFieldModel)
+    mommy = Mommy(model=BooleanFieldModel)
     mommy.type_mapping.update(MODEL_MOMMY_MAPPING)
     mommy.prepare()
     mommy.make()
@@ -32,7 +32,7 @@ def test_StrictBooleanField_descriptor_doesnt_disappear():
     """
     don't clobber the descriptor
     """
-    value = models.BooleanFieldModel()
+    value = BooleanFieldModel()
     assert value.field == True
     for x in range(1, 3):
         value.field = False
@@ -48,11 +48,11 @@ def test_StrictBooleanField_trues():
     """
     Cannot be null
     """
-    assert models.BooleanFieldModel(field='t').field == True
-    assert models.BooleanFieldModel(field='1').field == True
-    assert models.BooleanFieldModel(field=1).field == True
-    assert models.BooleanFieldModel(field='True').field == True
-    assert models.BooleanFieldModel(field=True).field == True
+    assert BooleanFieldModel(field='t').field == True
+    assert BooleanFieldModel(field='1').field == True
+    assert BooleanFieldModel(field=1).field == True
+    assert BooleanFieldModel(field='True').field == True
+    assert BooleanFieldModel(field=True).field == True
 
 
 @pytest.mark.django_db
@@ -60,24 +60,24 @@ def test_StrictBooleanField_false():
     """
     Cannot be null
     """
-    assert models.BooleanFieldModel(field='f').field == False
-    assert models.BooleanFieldModel(field='0').field == False
-    assert models.BooleanFieldModel(field=0).field == False
-    assert models.BooleanFieldModel(field='False').field == False
-    assert models.BooleanFieldModel(field=False).field == False
+    assert BooleanFieldModel(field='f').field == False
+    assert BooleanFieldModel(field='0').field == False
+    assert BooleanFieldModel(field=0).field == False
+    assert BooleanFieldModel(field='False').field == False
+    assert BooleanFieldModel(field=False).field == False
 
 
 
 @pytest.mark.django_db
 def test_StrictBooleanField_cant_be_null():
     with pytest.raises(ValidationError):
-        models.BooleanFieldModel(field=None)
+        BooleanFieldModel(field=None)
 
 
 @pytest.mark.django_db
 def test_StrictBooleanField_invalid():
     with pytest.raises(ValidationError):
-        models.BooleanFieldModel(field='troo')
+        BooleanFieldModel(field='troo')
 
 
 @pytest.mark.django_db
@@ -85,7 +85,7 @@ def test_StrictBooleanField_ok_until_changed():
     """
     Ensure this value cannot change to an invalid state
     """
-    model = models.BooleanFieldModel(field=True)
+    model = BooleanFieldModel(field=True)
     assert model.field == True
     with pytest.raises(ValidationError):
         model.field = 'faaaaalse'
@@ -96,10 +96,10 @@ def test_StrictBooleanField_create_via_queryset():
     """
     Ensure this value is less than or equal to 15.
     """
-    assert models.BooleanFieldModel.objects.count() == 0
+    assert BooleanFieldModel.objects.count() == 0
     with pytest.raises(ValidationError):
-        models.BooleanFieldModel.objects.create(field=16)
-    assert models.BooleanFieldModel.objects.count() == 0
+        BooleanFieldModel.objects.create(field=16)
+    assert BooleanFieldModel.objects.count() == 0
 
 
 @pytest.mark.django_db
@@ -108,6 +108,6 @@ def test_StrictBooleanField_update_via_queryset_invalid_then_get():
     So for whatever reason, by the time this gets to the FieldCleaningDescriptor
     the 'blep' has been converted into True ... fun.
     """
-    model = models.BooleanFieldModel.objects.create(field=False)
+    model = BooleanFieldModel.objects.create(field=False)
     model.__class__.objects.filter(pk=model.pk).update(field='blep')
     assert model.__class__.objects.get(pk=model.pk).field == True

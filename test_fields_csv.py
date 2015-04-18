@@ -6,7 +6,7 @@ from __future__ import division
 from decimal import Decimal
 from django.core.exceptions import ValidationError
 import pytest
-from fakeapp import models
+from fakeapp.models import CommaSeparatedIntegerFieldModel
 
 
 @pytest.mark.django_db
@@ -15,7 +15,7 @@ def test_StrictCsvField_no_args():
     If no args, are given: This field cannot be blank.
     """
     with pytest.raises(ValidationError):
-        value = models.CommaSeparatedIntegerFieldModel()
+        value = CommaSeparatedIntegerFieldModel()
 
 
 
@@ -25,7 +25,7 @@ def test_StrictBigIntegerField_descriptor_doesnt_disappear():
     """
     don't clobber the descriptor
     """
-    value = models.CommaSeparatedIntegerFieldModel(field='1,2,3')
+    value = CommaSeparatedIntegerFieldModel(field='1,2,3')
     assert value.field == '1,2,3'
     with pytest.raises(ValidationError):
         value.field = 'v'
@@ -41,9 +41,9 @@ def test_StrictCsvField_values():
     """
     Various conversions, based on the equivalent boolean ones.
     """
-    assert models.CommaSeparatedIntegerFieldModel(field='1,2').field == '1,2'
-    assert models.CommaSeparatedIntegerFieldModel(field='1').field == '1'
-    assert models.CommaSeparatedIntegerFieldModel(field='1,').field == '1,'
+    assert CommaSeparatedIntegerFieldModel(field='1,2').field == '1,2'
+    assert CommaSeparatedIntegerFieldModel(field='1').field == '1'
+    assert CommaSeparatedIntegerFieldModel(field='1,').field == '1,'
 
 
 @pytest.mark.django_db
@@ -52,9 +52,9 @@ def test_StrictCsvField_values_error_length():
     Once an input is too long, error loudly.
     ValidationError: Ensure this value has at most 255 characters (it has 256)
     """
-    assert models.CommaSeparatedIntegerFieldModel(field='1,'*10).field == '1,'*10
+    assert CommaSeparatedIntegerFieldModel(field='1,'*10).field == '1,'*10
     with pytest.raises(ValidationError):
-        models.CommaSeparatedIntegerFieldModel(field='1,'*200)
+        CommaSeparatedIntegerFieldModel(field='1,'*200)
 
 
 
@@ -64,7 +64,7 @@ def test_StrictCsvField_cant_be_null():
     ValidationError: This field cannot be null
     """
     with pytest.raises(ValidationError):
-        models.CommaSeparatedIntegerFieldModel(field=None)
+        CommaSeparatedIntegerFieldModel(field=None)
 
 
 @pytest.mark.django_db
@@ -72,7 +72,7 @@ def test_StrictCsvField_ok_until_changed():
     """
     Ensure this value cannot change to an invalid state after being set
     """
-    model = models.CommaSeparatedIntegerFieldModel(field='1,'*100)
+    model = CommaSeparatedIntegerFieldModel(field='1,'*100)
     with pytest.raises(ValidationError):
         model.field = '1,'*256
 
@@ -82,10 +82,10 @@ def test_StrictCsvField_create_via_queryset():
     """
     ValidationError: Ensure this value has at most 255 characters (it has 256)
     """
-    assert models.CommaSeparatedIntegerFieldModel.objects.count() == 0
+    assert CommaSeparatedIntegerFieldModel.objects.count() == 0
     with pytest.raises(ValidationError):
-        models.CommaSeparatedIntegerFieldModel.objects.create(field='a'*100)
-    assert models.CommaSeparatedIntegerFieldModel.objects.count() == 0
+        CommaSeparatedIntegerFieldModel.objects.create(field='a'*100)
+    assert CommaSeparatedIntegerFieldModel.objects.count() == 0
 
 
 @pytest.mark.django_db
@@ -94,7 +94,7 @@ def test_StrictCsvField_update_via_queryset_invalid_then_get():
     So for whatever reason, by the time this gets to the FieldCleaningDescriptor
     the 'blep' has been converted into True ... fun.
     """
-    model = models.CommaSeparatedIntegerFieldModel.objects.create(field='1,')
+    model = CommaSeparatedIntegerFieldModel.objects.create(field='1,')
     model.__class__.objects.filter(pk=model.pk).update(field=Decimal('1.011'))
     with pytest.raises(ValidationError):
         model.__class__.objects.get(pk=model.pk)
