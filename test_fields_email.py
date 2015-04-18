@@ -64,7 +64,7 @@ def test_StrictEmailField_values_error_length():
     Enter a valid email address
     Ensure this value has at most 254 characters (it has 255)
     """
-    newval = 't@{field}.tt'.format(field='t' * 200)
+    newval = 't@{field}.tt'.format(field='t' * 50)
     assert EmailFieldModel(field=newval).field == newval
     with pytest.raises(ValidationError):
         assert EmailFieldModel(field='t'*256).field == 't'
