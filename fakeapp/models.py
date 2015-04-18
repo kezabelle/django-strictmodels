@@ -93,7 +93,7 @@ class DecimalFieldModel(models.Model):
 
 
 class EmailFieldModel(models.Model):
-    field = models.EmailField()
+    field = strict.StrictEmailField()
 
 
 

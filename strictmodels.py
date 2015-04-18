@@ -175,4 +175,5 @@ else:
         StrictDateField: generators.gen_date,
         StrictDateTimeField: generators.gen_datetime,
         StrictDecimalField: generators.gen_decimal,
+        StrictEmailField: generators.gen_email,
     }
