@@ -71,7 +71,7 @@ class DateFieldModel(models.Model):
 
 
 class DateTimeFieldModel(models.Model):
-    field = models.DateTimeField()
+    field = strict.StrictDateTimeField()
 
 
 
