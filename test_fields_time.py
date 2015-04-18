@@ -4,7 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
 from django.core.exceptions import ValidationError
-from django.utils.datetime_safe import time
+from datetime import time
 from model_mommy.mommy import Mommy
 import pytest
 from fakeapp.models import TimeFieldModel
