@@ -153,7 +153,7 @@ class TextFieldModel(models.Model):
 
 
 class TimeFieldModel(models.Model):
-    field = models.TimeField()
+    field = strict.StrictTimeField()
 
 
 
