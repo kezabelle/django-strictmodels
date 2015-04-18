@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import fields
 
 __version_info__ = '0.1.0'
@@ -140,6 +141,11 @@ class StrictSlugField(fields.SlugField):
 
 
 class StrictSmallIntegerField(fields.SmallIntegerField):
+    default_validators = [
+        MinValueValidator(-32768),
+        MaxValueValidator(32767)
+    ]
+
     def contribute_to_class(self, cls, name, **kwargs):
         super(StrictSmallIntegerField, self).contribute_to_class(cls, name, **kwargs)
         setattr(cls, self.name, FieldCleaningDescriptor(self))
@@ -172,9 +178,11 @@ else:
         StrictBooleanField: generators.gen_boolean,
         StrictBigIntegerField: generators.gen_integer,
         StrictCharField: generators.gen_string,
+        # StrictCommaSeparatedIntegerField: generators.gen_string,
         StrictDateField: generators.gen_date,
         StrictDateTimeField: generators.gen_datetime,
         StrictDecimalField: generators.gen_decimal,
         StrictEmailField: generators.gen_email,
         StrictTimeField: generators.gen_time,
+        StrictSmallIntegerField: lambda: generators.gen_integer(0),
     }
