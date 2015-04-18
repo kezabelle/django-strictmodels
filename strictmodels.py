@@ -174,4 +174,5 @@ else:
         StrictCharField: generators.gen_string,
         StrictDateField: generators.gen_date,
         StrictDateTimeField: generators.gen_datetime,
+        StrictDecimalField: generators.gen_decimal,
     }

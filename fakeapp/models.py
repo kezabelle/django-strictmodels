@@ -68,16 +68,28 @@ class CommaSeparatedIntegerFieldModel(models.Model):
 class DateFieldModel(models.Model):
     field = strict.StrictDateField()
 
+    def __repr__(self):
+        return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
+            cls=self.__class__.__name__, pk=self.pk, field=self.field,
+            )
 
 
 class DateTimeFieldModel(models.Model):
     field = strict.StrictDateTimeField()
 
+    def __repr__(self):
+        return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
+            cls=self.__class__.__name__, pk=self.pk, field=self.field,
+            )
 
 
 class DecimalFieldModel(models.Model):
-    field = models.DecimalField(max_digits=5, decimal_places=3)
+    field = strict.StrictDecimalField(max_digits=5, decimal_places=3)
 
+    def __repr__(self):
+        return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
+            cls=self.__class__.__name__, pk=self.pk, field=self.field,
+            )
 
 
 class EmailFieldModel(models.Model):
