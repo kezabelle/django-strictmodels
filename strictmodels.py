@@ -129,6 +129,11 @@ class StrictPositiveIntegerField(fields.PositiveIntegerField):
 
 
 class StrictPositiveSmallIntegerField(fields.PositiveSmallIntegerField):
+    default_validators = [
+        MinValueValidator(0),
+        MaxValueValidator(32767)
+    ]
+
     def contribute_to_class(self, cls, name, **kwargs):
         super(StrictPositiveSmallIntegerField, self).contribute_to_class(cls, name, **kwargs)
         setattr(cls, self.name, FieldCleaningDescriptor(self))
@@ -184,5 +189,6 @@ else:
         StrictDecimalField: generators.gen_decimal,
         StrictEmailField: generators.gen_email,
         StrictTimeField: generators.gen_time,
-        StrictSmallIntegerField: lambda: generators.gen_integer(0),
+        StrictSmallIntegerField: lambda: generators.gen_integer(-30000, 30000),
+        StrictPositiveSmallIntegerField: lambda: generators.gen_integer(0, 30000),
     }

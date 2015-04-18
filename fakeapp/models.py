@@ -133,7 +133,7 @@ class PositiveIntegerFieldModel(models.Model):
 
 
 class PositiveSmallIntegerFieldModel(models.Model):
-    field = models.PositiveSmallIntegerField()
+    field = strict.StrictPositiveSmallIntegerField()
 
 
 
