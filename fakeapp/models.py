@@ -158,4 +158,4 @@ class TimeFieldModel(models.Model):
 
 
 class URLFieldModel(models.Model):
-    field = models.URLField()
+    field = strict.StrictURLField()
