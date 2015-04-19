@@ -111,6 +111,11 @@ class StrictIPAddressField(fields.IPAddressField):
 
 
 class StrictIntegerField(fields.IntegerField):
+    default_validators = [
+        MinValueValidator(-2147483648),
+        MaxValueValidator(2147483647)
+    ]
+
     def contribute_to_class(self, cls, name, **kwargs):
         super(StrictIntegerField, self).contribute_to_class(cls, name, **kwargs)
         setattr(cls, self.name, FieldCleaningDescriptor(self))
@@ -189,6 +194,7 @@ else:
         StrictDecimalField: generators.gen_decimal,
         StrictEmailField: generators.gen_email,
         StrictTimeField: generators.gen_time,
-        StrictSmallIntegerField: lambda: generators.gen_integer(-30000, 30000),
-        StrictPositiveSmallIntegerField: lambda: generators.gen_integer(0, 30000),
+        StrictSmallIntegerField: lambda: generators.gen_integer(-32768, 32767),
+        StrictPositiveSmallIntegerField: lambda: generators.gen_integer(0, 32767),
+        StrictIntegerField: lambda: generators.gen_integer(-2147483648, 2147483647),
     }

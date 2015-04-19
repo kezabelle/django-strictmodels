@@ -118,7 +118,7 @@ class IPAddressFieldModel(models.Model):
 
 
 class IntegerFieldModel(models.Model):
-    field = models.IntegerField()
+    field = strict.StrictIntegerField()
 
 
 
