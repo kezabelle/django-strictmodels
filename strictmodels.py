@@ -189,11 +189,16 @@ try:
 except ImportError:  # model_mommy is not installed
     MODEL_MOMMY_MAPPING = {}
 else:
+
+    def gen_commaseparated_ingeters():
+        return ','.join(str(generators.gen_integer(1, 100))
+                        for x in xrange(1, 10))
+
     MODEL_MOMMY_MAPPING = {
         StrictBooleanField: generators.gen_boolean,
         StrictBigIntegerField: generators.gen_integer,
         StrictCharField: generators.gen_string,
-        # StrictCommaSeparatedIntegerField: generators.gen_string,
+        StrictCommaSeparatedIntegerField: gen_commaseparated_ingeters,
         StrictDateField: generators.gen_date,
         StrictDateTimeField: generators.gen_datetime,
         StrictDecimalField: generators.gen_decimal,
