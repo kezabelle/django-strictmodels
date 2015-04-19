@@ -198,7 +198,7 @@ else:
 
     def gen_commaseparated_ingeters(max_length):
         return ','.join(str(generators.gen_integer(1, 9))
-                        for x in six.moves.range(1, max_length / 2))
+                        for x in six.moves.range(1, max_length // 2))
     gen_commaseparated_ingeters.required = ['max_length']
 
     MODEL_MOMMY_MAPPING = {
