@@ -1,6 +1,7 @@
 from django.core.exceptions import FieldError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import fields
+from django.utils import six
 
 __version_info__ = '0.1.0'
 __version__ = '0.1.0'
@@ -197,7 +198,7 @@ else:
 
     def gen_commaseparated_ingeters(max_length):
         return ','.join(str(generators.gen_integer(1, 9))
-                        for x in xrange(1, max_length / 2))
+                        for x in six.moves.range(1, max_length / 2))
     gen_commaseparated_ingeters.required = ['max_length']
 
     MODEL_MOMMY_MAPPING = {
