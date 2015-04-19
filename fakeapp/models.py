@@ -138,7 +138,7 @@ class PositiveSmallIntegerFieldModel(models.Model):
 
 
 class SlugFieldModel(models.Model):
-    field = models.SlugField()
+    field = strict.StrictSlugField()
 
 
 

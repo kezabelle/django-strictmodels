@@ -209,4 +209,5 @@ else:
         StrictIntegerField: lambda: generators.gen_integer(-2147483648, 2147483647),
         StrictPositiveIntegerField: lambda: generators.gen_integer(0, 2147483647),
         StrictURLField: generators.gen_url,
+        StrictSlugField: generators.gen_slug,
     }
