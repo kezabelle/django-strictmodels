@@ -1,3 +1,4 @@
+from django.core.exceptions import FieldError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import fields
 
@@ -35,12 +36,6 @@ class FieldCleaningDescriptor(object):
 class StrictBigIntegerField(fields.BigIntegerField):
     def contribute_to_class(self, cls, name, **kwargs):
         super(StrictBigIntegerField, self).contribute_to_class(cls, name, **kwargs)
-        setattr(cls, self.name, FieldCleaningDescriptor(self))
-
-
-class StrictBinaryField(fields.BinaryField):
-    def contribute_to_class(self, cls, name, **kwargs):
-        super(StrictBinaryField, self).contribute_to_class(cls, name, **kwargs)
         setattr(cls, self.name, FieldCleaningDescriptor(self))
 
 
@@ -176,6 +171,22 @@ class StrictURLField(fields.URLField):
     def contribute_to_class(self, cls, name, **kwargs):
         super(StrictURLField, self).contribute_to_class(cls, name, **kwargs)
         setattr(cls, self.name, FieldCleaningDescriptor(self))
+
+
+try:
+    fields.BinaryField
+except AttributeError:
+    class StrictBinaryField(object):
+        __slots__ = ()
+        def __init__(self):
+            raise FieldError("Can't use StrictBinaryField because it's "
+                             "superclass doesn't exist in the installed "
+                             "version of Django")
+else:
+    class StrictBinaryField(fields.BinaryField):
+        def contribute_to_class(self, cls, name, **kwargs):
+            super(StrictBinaryField, self).contribute_to_class(cls, name, **kwargs)
+            setattr(cls, self.name, FieldCleaningDescriptor(self))
 
 
 try:
