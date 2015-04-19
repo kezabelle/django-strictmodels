@@ -104,12 +104,6 @@ class StrictGenericIPAddressField(fields.GenericIPAddressField):
         setattr(cls, self.name, FieldCleaningDescriptor(self))
 
 
-class StrictIPAddressField(fields.IPAddressField):
-    def contribute_to_class(self, cls, name, **kwargs):
-        super(StrictIPAddressField, self).contribute_to_class(cls, name, **kwargs)
-        setattr(cls, self.name, FieldCleaningDescriptor(self))
-
-
 class StrictIntegerField(fields.IntegerField):
     default_validators = [
         MinValueValidator(-2147483648),

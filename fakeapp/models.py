@@ -108,12 +108,7 @@ class FloatFieldModel(models.Model):
 
 
 class GenericIPAddressFieldModel(models.Model):
-    field = models.GenericIPAddressField()
-
-
-
-class IPAddressFieldModel(models.Model):
-    field = models.IPAddressField()
+    field = strict.StrictGenericIPAddressField()
 
 
 
