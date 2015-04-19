@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 from __future__ import division
 from decimal import Decimal
 from django.core.exceptions import ValidationError
-from django.utils.datetime_safe import datetime
 from model_mommy.mommy import Mommy
 import pytest
 from fakeapp.models import DecimalFieldModel

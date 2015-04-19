@@ -103,7 +103,7 @@ class FilePathFieldModel(models.Model):
 
 
 class FloatFieldModel(models.Model):
-    field = models.FloatField()
+    field = strict.StrictFloatField()
 
 
 
