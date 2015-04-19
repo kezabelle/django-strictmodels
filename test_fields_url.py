@@ -52,7 +52,7 @@ def test_StrictURLField_values():
     Various conversions, based on the equivalent boolean ones.
     """
     assert URLFieldModel(field='http://t.tt').field == 'http://t.tt'
-    assert URLFieldModel(field='https://1.11').field == 'https://1.11'
+    assert URLFieldModel(field='https://a.ab').field == 'https://a.ab'
     with pytest.raises(ValidationError):
         assert URLFieldModel(field=1).field == '1'
 
