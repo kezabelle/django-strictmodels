@@ -190,9 +190,10 @@ except ImportError:  # model_mommy is not installed
     MODEL_MOMMY_MAPPING = {}
 else:
 
-    def gen_commaseparated_ingeters():
-        return ','.join(str(generators.gen_integer(1, 100))
-                        for x in xrange(1, 10))
+    def gen_commaseparated_ingeters(max_length):
+        return ','.join(str(generators.gen_integer(1, 9))
+                        for x in xrange(1, max_length / 2))
+    gen_commaseparated_ingeters.required = ['max_length']
 
     MODEL_MOMMY_MAPPING = {
         StrictBooleanField: generators.gen_boolean,
