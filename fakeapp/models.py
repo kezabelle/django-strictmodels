@@ -128,7 +128,7 @@ class NullBooleanFieldModel(models.Model):
 
 
 class PositiveIntegerFieldModel(models.Model):
-    field = models.PositiveIntegerField()
+    field = strict.StrictPositiveIntegerField()
 
 
 

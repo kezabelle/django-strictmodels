@@ -128,6 +128,11 @@ class StrictNullBooleanField(fields.NullBooleanField):
 
 
 class StrictPositiveIntegerField(fields.PositiveIntegerField):
+    default_validators = [
+        MinValueValidator(0),
+        MaxValueValidator(2147483647)
+    ]
+
     def contribute_to_class(self, cls, name, **kwargs):
         super(StrictPositiveIntegerField, self).contribute_to_class(cls, name, **kwargs)
         setattr(cls, self.name, FieldCleaningDescriptor(self))
@@ -197,4 +202,5 @@ else:
         StrictSmallIntegerField: lambda: generators.gen_integer(-32768, 32767),
         StrictPositiveSmallIntegerField: lambda: generators.gen_integer(0, 32767),
         StrictIntegerField: lambda: generators.gen_integer(-2147483648, 2147483647),
+        StrictPositiveIntegerField: lambda: generators.gen_integer(0, 2147483647),
     }
