@@ -118,7 +118,7 @@ class IntegerFieldModel(models.Model):
 
 
 class NullBooleanFieldModel(models.Model):
-    field = models.NullBooleanField()
+    field = strict.StrictNullBooleanField()
 
 
 
