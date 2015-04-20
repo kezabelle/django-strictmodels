@@ -95,7 +95,10 @@ class DecimalFieldModel(models.Model):
 class EmailFieldModel(models.Model):
     field = strict.StrictEmailField()
 
-
+    def __repr__(self):
+        return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
+            cls=self.__class__.__name__, pk=self.pk, field=self.field,
+            )
 
 class FilePathFieldModel(models.Model):
     field = models.FilePathField()
@@ -105,41 +108,71 @@ class FilePathFieldModel(models.Model):
 class FloatFieldModel(models.Model):
     field = strict.StrictFloatField()
 
+    def __repr__(self):
+        return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
+            cls=self.__class__.__name__, pk=self.pk, field=self.field,
+            )
 
 
 class GenericIPAddressFieldModel(models.Model):
     field = strict.StrictGenericIPAddressField()
 
-
+    def __repr__(self):
+        return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
+            cls=self.__class__.__name__, pk=self.pk, field=self.field,
+            )
 
 class IntegerFieldModel(models.Model):
     field = strict.StrictIntegerField()
 
+    def __repr__(self):
+        return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
+            cls=self.__class__.__name__, pk=self.pk, field=self.field,
+            )
 
 
 class NullBooleanFieldModel(models.Model):
     field = strict.StrictNullBooleanField()
 
+    def __repr__(self):
+        return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
+            cls=self.__class__.__name__, pk=self.pk, field=self.field,
+            )
 
 
 class PositiveIntegerFieldModel(models.Model):
     field = strict.StrictPositiveIntegerField()
 
+    def __repr__(self):
+        return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
+            cls=self.__class__.__name__, pk=self.pk, field=self.field,
+            )
 
 
 class PositiveSmallIntegerFieldModel(models.Model):
     field = strict.StrictPositiveSmallIntegerField()
 
-
+    def __repr__(self):
+        return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
+            cls=self.__class__.__name__, pk=self.pk, field=self.field,
+            )
 
 class SlugFieldModel(models.Model):
     field = strict.StrictSlugField()
 
+    def __repr__(self):
+        return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
+            cls=self.__class__.__name__, pk=self.pk, field=self.field,
+            )
 
 
 class SmallIntegerFieldModel(models.Model):
     field = strict.StrictSmallIntegerField()
 
+    def __repr__(self):
+        return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
+            cls=self.__class__.__name__, pk=self.pk, field=self.field,
+            )
 
 
 class TextFieldModel(models.Model):
@@ -154,6 +187,10 @@ class TextFieldModel(models.Model):
 class TimeFieldModel(models.Model):
     field = strict.StrictTimeField()
 
+    def __repr__(self):
+        return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
+            cls=self.__class__.__name__, pk=self.pk, field=self.field,
+            )
 
 
 class URLFieldModel(models.Model):
