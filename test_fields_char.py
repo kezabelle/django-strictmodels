@@ -29,7 +29,7 @@ def test_StrictCharField_mommy():
 
 
 @pytest.mark.django_db
-def test_StrictBigIntegerField_descriptor_doesnt_disappear():
+def test_StrictCharField_descriptor_doesnt_disappear():
     """
     don't clobber the descriptor
     """
