@@ -2,6 +2,7 @@ from django.core.exceptions import FieldError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import fields
 from django.utils import six
+from django.utils.encoding import smart_text
 
 __version_info__ = '0.1.0'
 __version__ = '0.1.0'
@@ -157,6 +158,16 @@ class StrictSmallIntegerField(fields.SmallIntegerField):
 
 
 class StrictTextField(fields.TextField):
+    def to_python(self, value):
+        # why the hell isn't this in Django?
+        if isinstance(value, six.string_types) or value is None:
+            return value
+        return smart_text(value)
+
+    def get_prep_value(self, value):
+        # Emulate the functionality of other fields, which call to_python ...
+        return self.to_python(value)
+
     def contribute_to_class(self, cls, name, **kwargs):
         super(StrictTextField, self).contribute_to_class(cls, name, **kwargs)
         setattr(cls, self.name, FieldCleaningDescriptor(self))
@@ -218,4 +229,5 @@ else:
         StrictURLField: generators.gen_url,
         StrictSlugField: generators.gen_slug,
         StrictFloatField: generators.gen_float,
+        StrictTextField: generators.gen_text,
     }

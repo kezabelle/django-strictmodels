@@ -143,8 +143,12 @@ class SmallIntegerFieldModel(models.Model):
 
 
 class TextFieldModel(models.Model):
-    field = models.TextField()
+    field = strict.StrictTextField()
 
+    def __repr__(self):
+        return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
+            cls=self.__class__.__name__, pk=self.pk, field=self.field,
+            )
 
 
 class TimeFieldModel(models.Model):
