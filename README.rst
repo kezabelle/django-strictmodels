@@ -38,47 +38,47 @@ Implemented fields
 
 Currently, the available fields which have at least some testing, are:
 
-* StrictBigIntegerField (subclasses ``BigIntegerField``)
+* ``strictmodels.StrictBigIntegerField`` (subclasses ``BigIntegerField``)
 
   * TODO: implement maximum and minimum boundaries?
   
-* StrictBooleanField (subclasses ``BooleanField``)
-* StrictNullBooleanField (subclasses ``NullBooleanField``)
-* StrictCharField (subclasses ``CharField``)
-* StrictTextField (subclasses ``TextField``)
-* StrictCommaSeparatedIntegerField (subclasses ``CommaSeparatedIntegerField``)
-* StrictDateField (subclasses ``DateField``)
-* StrictDateTimeField (subclasses ``DateTimeField``)
-* StrictTimeField (subclasses ``TimeField``)
-* StrictDecimalField (subclasses ``DecimalField``)
-* StrictEmailField (subclasses ``EmailField``)
+* ``strictmodels.StrictBooleanField`` (subclasses ``BooleanField``)
+* ``strictmodels.StrictNullBooleanField`` (subclasses ``NullBooleanField``)
+* ``strictmodels.StrictCharField`` (subclasses ``CharField``)
+* ``strictmodels.StrictTextField`` (subclasses ``TextField``)
+* ``strictmodels.StrictCommaSeparatedIntegerField`` (subclasses ``CommaSeparatedIntegerField``)
+* ``strictmodels.StrictDateField`` (subclasses ``DateField``)
+* ``strictmodels.StrictDateTimeField`` (subclasses ``DateTimeField``)
+* ``strictmodels.StrictTimeField`` (subclasses ``TimeField``)
+* ``strictmodels.StrictDecimalField`` (subclasses ``DecimalField``)
+* ``strictmodels.StrictEmailField`` (subclasses ``EmailField``)
 
   * Will only allow string sequences that pass an emailish regular expression.
 
-* StrictFilePathField (subclasses ``FilePathField``)
+* ``strictmodels.StrictFilePathField`` (subclasses ``FilePathField``)
 
   * Will only allow strings whose path is within that set on the field itself.
 
-* StrictFloatField (subclasses ``FloatField``)
-* StrictGenericIPAddressField (subclasses ``GenericIPAddressField``)
-* StrictIntegerField (subclasses ``IntegerField``)
+* ``strictmodels.StrictFloatField`` (subclasses ``FloatField``)
+* ``strictmodels.StrictGenericIPAddressField`` (subclasses ``GenericIPAddressField``)
+* ``strictmodels.StrictIntegerField`` (subclasses ``IntegerField``)
 
   * will only allow -2147483648 to 2147483647
 
-* StrictPositiveIntegerField (subclasses ``PositiveIntegerField``)
+* ``strictmodels.StrictPositiveIntegerField`` (subclasses ``PositiveIntegerField``)
 
   * will only allow 0 to 2147483647
 
-* StrictSmallIntegerField (subclasses ``SmallIntegerField``)
+* ``strictmodels.StrictSmallIntegerField`` (subclasses ``SmallIntegerField``)
 
   * will only allow -32768 to 32767
 
-* StrictPositiveSmallIntegerField (subclasses ``PositiveSmallIntegerField``)
+* ``strictmodels.StrictPositiveSmallIntegerField`` (subclasses ``PositiveSmallIntegerField``)
 
   * will only allow 0 to 32767
 
-* StrictSlugField (subclasses ``SlugField``)
-* StrictURLField (subclasses ``URLField``)
+* ``strictmodels.StrictSlugField`` (subclasses ``SlugField``)
+* ``strictmodels.StrictURLField`` (subclasses ``URLField``)
 
 Running the tests
 -----------------
