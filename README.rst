@@ -33,6 +33,53 @@ because ``b`` is a normal Django field::
 
 At least not at *that* point.
 
+Implemented fields
+------------------
+
+Currently, the available fields which have at least some testing, are:
+
+* StrictBigIntegerField (subclasses ``BigIntegerField``)
+
+  * TODO: implement maximum and minimum boundaries?
+  
+* StrictBooleanField (subclasses ``BooleanField``)
+* StrictNullBooleanField (subclasses ``NullBooleanField``)
+* StrictCharField (subclasses ``CharField``)
+* StrictTextField (subclasses ``TextField``)
+* StrictCommaSeparatedIntegerField (subclasses ``CommaSeparatedIntegerField``)
+* StrictDateField (subclasses ``DateField``)
+* StrictDateTimeField (subclasses ``DateTimeField``)
+* StrictTimeField (subclasses ``TimeField``)
+* StrictDecimalField (subclasses ``DecimalField``)
+* StrictEmailField (subclasses ``EmailField``)
+
+  * Will only allow string sequences that pass an emailish regular expression.
+
+* StrictFilePathField (subclasses ``FilePathField``)
+
+  * Will only allow strings whose path is within that set on the field itself.
+
+* StrictFloatField (subclasses ``FloatField``)
+* StrictGenericIPAddressField (subclasses ``GenericIPAddressField``)
+* StrictIntegerField (subclasses ``IntegerField``)
+
+  * will only allow -2147483648 to 2147483647
+
+* StrictPositiveIntegerField (subclasses ``PositiveIntegerField``)
+
+  * will only allow 0 to 2147483647
+
+* StrictSmallIntegerField (subclasses ``SmallIntegerField``)
+
+  * will only allow -32768 to 32767
+
+* StrictPositiveSmallIntegerField (subclasses ``PositiveSmallIntegerField``)
+
+  * will only allow 0 to 32767
+
+* StrictSlugField (subclasses ``SlugField``)
+* StrictURLField (subclasses ``URLField``)
+
 Running the tests
 -----------------
 
