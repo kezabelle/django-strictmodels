@@ -6,6 +6,7 @@ from __future__ import division
 from django.core import validators
 from django.db import models
 import strictmodels as strict
+from django.conf import settings
 
 
 class BigIntegerFieldModel(models.Model):
@@ -101,7 +102,7 @@ class EmailFieldModel(models.Model):
             )
 
 class FilePathFieldModel(models.Model):
-    field = models.FilePathField()
+    field = strict.StrictFilePathField(path=settings.BASE_DIR)
 
 
 
