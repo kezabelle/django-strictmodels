@@ -1,8 +1,9 @@
-from django.core.exceptions import FieldError
+from django.core.exceptions import FieldError, ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import fields
 from django.utils import six
 from django.utils.encoding import smart_text
+from django.utils.translation import ugettext_lazy as _
 
 __version_info__ = '0.1.0'
 __version__ = '0.1.0'
@@ -92,6 +93,25 @@ class StrictFilePathField(fields.FilePathField):
     def get_prep_value(self, value):
         # Emulate the functionality of other fields, which call to_python ...
         return self.to_python(value)
+
+    def validate(self, value, model_instance):
+        # quick sanity check that the file path is rooted.
+        if value not in self.empty_values and not value.startswith(self.path):
+            message = _('Value %(value)r does not start with %(path)r')
+            raise ValidationError(message=message, code='invalid_choice',
+                                  params={'value': value, 'path': self.path})
+
+        # patch in an iterable of files based on the currently configured field.
+        choices = tuple(self.formfield().choices)
+        if value not in self.empty_values and choices:
+            for option_key, option_value in choices:
+                if option_key == value:
+                    return
+            message = _('Value %(value)r is not in %(choices)r')
+            raise ValidationError(message=message, code='invalid_choice',
+                                  params={'value': value, 'choices': choices})
+        return super(StrictFilePathField, self).validate(
+            value=value, model_instance=model_instance)
 
     def contribute_to_class(self, cls, name, **kwargs):
         super(StrictFilePathField, self).contribute_to_class(cls, name, **kwargs)
