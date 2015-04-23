@@ -35,7 +35,7 @@ class NullBigIntegerFieldModel(models.Model):
 
 
 class BinaryFieldModel(models.Model):
-    field = models.BinaryField()
+    field = strict.StrictBinaryField()
 
 
 
@@ -196,3 +196,8 @@ class TimeFieldModel(models.Model):
 
 class URLFieldModel(models.Model):
     field = strict.StrictURLField()
+
+    def __repr__(self):
+        return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
+            cls=self.__class__.__name__, pk=self.pk, field=self.field,
+            )
