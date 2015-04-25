@@ -40,7 +40,7 @@ Currently, the available fields which have at least some testing, are:
 
 * ``strictmodels.StrictBigIntegerField`` (subclasses ``BigIntegerField``)
 
-  * TODO: implement maximum and minimum boundaries?
+  * will only allow -9223372036854775808 to 9223372036854775807
   
 * ``strictmodels.StrictBooleanField`` (subclasses ``BooleanField``)
 * ``strictmodels.StrictNullBooleanField`` (subclasses ``NullBooleanField``)

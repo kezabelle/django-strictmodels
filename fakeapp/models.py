@@ -10,11 +10,7 @@ from django.conf import settings
 
 
 class BigIntegerFieldModel(models.Model):
-    field = strict.StrictBigIntegerField(validators=[
-        validators.MinValueValidator(5),
-        validators.MaxValueValidator(15)
-    ])
-
+    field = strict.StrictBigIntegerField()
     def __repr__(self):
         return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
             cls=self.__class__.__name__, pk=self.pk, field=self.field,
@@ -22,10 +18,7 @@ class BigIntegerFieldModel(models.Model):
 
 
 class NullBigIntegerFieldModel(models.Model):
-    field = strict.StrictBigIntegerField(validators=[
-        validators.MinValueValidator(5),
-        validators.MaxValueValidator(15)
-    ], null=True, blank=True)
+    field = strict.StrictBigIntegerField(null=True, blank=True)
 
     def __repr__(self):
         return '<{cls!s} pk={pk!r}, field={field!r}>'.format(

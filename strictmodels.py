@@ -37,9 +37,18 @@ class FieldCleaningDescriptor(object):
 
 
 class StrictBigIntegerField(fields.BigIntegerField):
+    default_validators = [
+        MinValueValidator(-9223372036854775808),
+        MaxValueValidator(9223372036854775807)
+    ]
     def contribute_to_class(self, cls, name, **kwargs):
         super(StrictBigIntegerField, self).contribute_to_class(cls, name, **kwargs)
         setattr(cls, self.name, FieldCleaningDescriptor(self))
+
+    def get_db_prep_value(self, *args, **kwargs):
+        value = super(StrictBigIntegerField, self).get_db_prep_value(*args, **kwargs)
+        self.run_validators(value)
+        return value
 
 
 class StrictBooleanField(fields.BooleanField):

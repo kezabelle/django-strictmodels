@@ -79,7 +79,7 @@ def test_StrictBigIntegerField_descriptor_doesnt_disappear():
     value.field = 15
     assert value.field == 15
     with pytest.raises(ValidationError):
-        value.field = 16
+        value.field = 9223372036854775808
     assert value.field == 15
     value.field = 12
     assert value.field == 12
@@ -93,9 +93,9 @@ def test_StrictBigIntegerField_nullable():
     NullBigIntegerFieldModel(field=None)
     NullBigIntegerFieldModel()
     with pytest.raises(ValidationError):
-        NullBigIntegerFieldModel(field=1)
+        NullBigIntegerFieldModel(field=-9223372036854775809)
     with pytest.raises(ValidationError):
-        NullBigIntegerFieldModel(field=16)
+        NullBigIntegerFieldModel(field=9223372036854775808)
     NullBigIntegerFieldModel(field=5)
 
 
@@ -110,20 +110,14 @@ def test_StrictBigIntegerField_string():
 
 
 def test_StrictBigIntegerField_minvalue():
-    """
-    Ensure this value is greater than or equal to 5
-    """
     with pytest.raises(ValidationError):
-        BigIntegerFieldModel(field=1)
+        BigIntegerFieldModel(field=-9223372036854775809)
 
 
 
 def test_StrictBigIntegerField_maxvalue():
-    """
-    Ensure this value is less than or equal to 15
-    """
     with pytest.raises(ValidationError):
-        BigIntegerFieldModel(field=16)
+        BigIntegerFieldModel(field=9223372036854775808)
 
 
 
@@ -140,7 +134,7 @@ def test_StrictBigIntegerField_ok_until_changed():
     model5 = BigIntegerFieldModel(field=15)
     assert model5.field == 15
     with pytest.raises(ValidationError):
-        model5.field = 16
+        model5.field = 9223372036854775808
 
 
 @pytest.mark.django_db
@@ -150,7 +144,7 @@ def test_StrictBigIntegerField_create_via_queryset():
     """
     assert BigIntegerFieldModel.objects.count() == 0
     with pytest.raises(ValidationError):
-        BigIntegerFieldModel.objects.create(field=16)
+        BigIntegerFieldModel.objects.create(field=9223372036854775808)
     assert BigIntegerFieldModel.objects.count() == 0
 
 
@@ -160,6 +154,7 @@ def test_StrictBigIntegerField_update_via_queryset_invalid_then_get():
     Ensure this value is less than or equal to 15.
     """
     model = BigIntegerFieldModel.objects.create(field=15)
-    model.__class__.objects.filter(pk=model.pk).update(field=16)
     with pytest.raises(ValidationError):
-        model.__class__.objects.get(pk=model.pk)
+        model.__class__.objects.filter(pk=model.pk).update(field=9223372036854775808)
+    with pytest.raises(ValidationError):
+        model.__class__.objects.filter(pk=model.pk).update(field=-9223372036854775809)
