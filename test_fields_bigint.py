@@ -4,7 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
 from django.core.exceptions import ValidationError
-from django.forms import model_to_dict
+from django.forms import model_to_dict, modelform_factory
 from model_mommy.mommy import Mommy
 import pytest
 from fakeapp.models import BigIntegerFieldModel, NullBigIntegerFieldModel
@@ -25,6 +25,33 @@ def test_StrictBigIntegerField_save():
     x = BigIntegerFieldModel(field=5)
     x.save()
     assert model_to_dict(x) == model_to_dict(BigIntegerFieldModel.objects.get(pk=x.pk))
+
+
+def test_StrictBigIntegerField_form_with_instance_valid():
+    x = BigIntegerFieldModel(field=5)
+    form_class = modelform_factory(model=BigIntegerFieldModel, fields=['field'])
+    form = form_class(data={'field': 6}, instance=x)
+    assert form.is_valid() is True
+    assert form.errors == {}
+
+
+@pytest.mark.xfail
+def test_StrictBigIntegerField_form_without_instance_valid():
+    form_class = modelform_factory(model=BigIntegerFieldModel, fields=['field'])
+    form = form_class(data={'field': 6})
+    assert form.is_valid() is True
+    assert form.errors == {}
+
+
+@pytest.mark.xfail
+def test_StrictBigIntegerField_form_with_instance_invalid():
+    """
+    Can I figure out a way to fix this?"""
+    x = BigIntegerFieldModel(field=5)
+    form_class = modelform_factory(model=BigIntegerFieldModel, fields=['field'])
+    form = form_class(data={'field': 4}, instance=x)
+    assert form.is_valid() is True
+    assert form.errors == {}
 
 
 @pytest.mark.django_db
