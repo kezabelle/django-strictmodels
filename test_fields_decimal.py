@@ -12,7 +12,7 @@ from fakeapp.models import DecimalFieldModel
 from strictmodels import MODEL_MOMMY_MAPPING
 
 
-@pytest.mark.django_db
+
 def test_StrictDecimalField_no_args():
     """
     If no args, are given: This field cannot be blank.
@@ -36,7 +36,7 @@ def test_StrictDecimalField_mommy():
     mommy.make()
 
 
-@pytest.mark.django_db
+
 def test_StrictDecimalField_descriptor_doesnt_disappear():
     """
     don't clobber the descriptor
@@ -56,7 +56,7 @@ def test_StrictDecimalField_descriptor_doesnt_disappear():
     assert value.field == Decimal('-1')
 
 
-@pytest.mark.django_db
+
 def test_StrictDecimalField_cant_be_null():
     """
     ValidationError: This field cannot be null
@@ -65,7 +65,7 @@ def test_StrictDecimalField_cant_be_null():
         DecimalFieldModel(field=None)
 
 
-@pytest.mark.django_db
+
 def test_StrictDecimalField_ok_until_changed():
     """
     Ensure this value cannot change to an invalid state after being set

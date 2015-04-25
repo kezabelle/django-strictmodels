@@ -11,7 +11,7 @@ from fakeapp.models import BigIntegerFieldModel, NullBigIntegerFieldModel
 from strictmodels import MODEL_MOMMY_MAPPING
 
 
-@pytest.mark.django_db
+
 def test_StrictBigIntegerField_null():
     """
     Cannot be null
@@ -43,7 +43,6 @@ def test_StrictBigIntegerField_mommy():
         pass
 
 
-@pytest.mark.django_db
 def test_StrictBigIntegerField_descriptor_doesnt_disappear():
     """
     don't clobber the descriptor
@@ -59,7 +58,7 @@ def test_StrictBigIntegerField_descriptor_doesnt_disappear():
     assert value.field == 12
 
 
-@pytest.mark.django_db
+
 def test_StrictBigIntegerField_nullable():
     """
     Cannot be null
@@ -73,7 +72,7 @@ def test_StrictBigIntegerField_nullable():
     NullBigIntegerFieldModel(field=5)
 
 
-@pytest.mark.django_db
+
 def test_StrictBigIntegerField_string():
     """
     Cannot be null
@@ -82,7 +81,7 @@ def test_StrictBigIntegerField_string():
         BigIntegerFieldModel(field='aaaa')
 
 
-@pytest.mark.django_db
+
 def test_StrictBigIntegerField_minvalue():
     """
     Ensure this value is greater than or equal to 5
@@ -91,7 +90,7 @@ def test_StrictBigIntegerField_minvalue():
         BigIntegerFieldModel(field=1)
 
 
-@pytest.mark.django_db
+
 def test_StrictBigIntegerField_maxvalue():
     """
     Ensure this value is less than or equal to 15
@@ -100,13 +99,13 @@ def test_StrictBigIntegerField_maxvalue():
         BigIntegerFieldModel(field=16)
 
 
-@pytest.mark.django_db
+
 def test_StrictBigIntegerField_ok():
     model4 = BigIntegerFieldModel(field=15)
     assert model4.field == 15
 
 
-@pytest.mark.django_db
+
 def test_StrictBigIntegerField_ok_until_changed():
     """
     Ensure this value is less than or equal to 15.

@@ -11,7 +11,7 @@ from fakeapp.models import GenericIPAddressFieldModel
 from strictmodels import MODEL_MOMMY_MAPPING
 
 
-@pytest.mark.django_db
+
 def test_StrictGenericIPAddressField_no_args():
     """
     If no args, are given: This field cannot be blank.
@@ -35,7 +35,7 @@ def test_StrictGenericIPAddressField_mommy():
     mommy.make()
 
 
-@pytest.mark.django_db
+
 def test_StrictGenericIPAddressField_descriptor_doesnt_disappear():
     """
     don't clobber the descriptor
@@ -53,7 +53,7 @@ def test_StrictGenericIPAddressField_descriptor_doesnt_disappear():
         value.field = None
 
 
-@pytest.mark.django_db
+
 def test_StrictGenericIPAddressField_values_error_length():
     """
     Once an input is too long, error loudly.
@@ -67,7 +67,7 @@ def test_StrictGenericIPAddressField_values_error_length():
 
 
 
-@pytest.mark.django_db
+
 def test_StrictGenericIPAddressField_cant_be_null():
     """
     ValidationError: This field cannot be null
@@ -76,7 +76,7 @@ def test_StrictGenericIPAddressField_cant_be_null():
         GenericIPAddressFieldModel(field=None)
 
 
-@pytest.mark.django_db
+
 def test_StrictGenericIPAddressField_ok_until_changed():
     """
     Ensure this value cannot change to an invalid state after being set

@@ -12,7 +12,7 @@ from fakeapp.models import CharFieldModel
 from strictmodels import MODEL_MOMMY_MAPPING
 
 
-@pytest.mark.django_db
+
 def test_StrictCharField_no_args():
     """
     If no args, are given: This field cannot be blank.
@@ -36,7 +36,7 @@ def test_StrictCharField_mommy():
     mommy.make()
 
 
-@pytest.mark.django_db
+
 def test_StrictCharField_descriptor_doesnt_disappear():
     """
     don't clobber the descriptor
@@ -54,7 +54,7 @@ def test_StrictCharField_descriptor_doesnt_disappear():
         value.field = None
 
 
-@pytest.mark.django_db
+
 def test_StrictCharField_values():
     """
     Various conversions, based on the equivalent boolean ones.
@@ -71,7 +71,7 @@ def test_StrictCharField_values():
     assert CharFieldModel(field=False).field == 'False'
 
 
-@pytest.mark.django_db
+
 def test_StrictCharField_values_error_length():
     """
     Once an input is too long, error loudly.
@@ -83,7 +83,7 @@ def test_StrictCharField_values_error_length():
 
 
 
-@pytest.mark.django_db
+
 def test_StrictCharField_cant_be_null():
     """
     ValidationError: This field cannot be null
@@ -92,7 +92,7 @@ def test_StrictCharField_cant_be_null():
         CharFieldModel(field=None)
 
 
-@pytest.mark.django_db
+
 def test_StrictCharField_ok_until_changed():
     """
     Ensure this value cannot change to an invalid state after being set

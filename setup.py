@@ -13,7 +13,7 @@ from setuptools.command.test import test as TestCommand
 class PyTest(TestCommand):
     def initialize_options(self):
         TestCommand.initialize_options(self)
-        self.pytest_args = ['-vvv', '--durations=10']
+        self.pytest_args = ['-vvv', '--durations=2']
 
     def finalize_options(self):
         TestCommand.finalize_options(self)

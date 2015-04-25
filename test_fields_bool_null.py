@@ -11,7 +11,7 @@ from fakeapp.models import NullBooleanFieldModel
 from strictmodels import MODEL_MOMMY_MAPPING
 
 
-@pytest.mark.django_db
+
 def test_StrictNullBooleanField_default():
     """
     Default is null
@@ -35,7 +35,7 @@ def test_StrictNullBooleanField_mommy():
     mommy.make()
 
 
-@pytest.mark.django_db
+
 def test_StrictNullBooleanField_descriptor_doesnt_disappear():
     """
     don't clobber the descriptor
@@ -51,7 +51,7 @@ def test_StrictNullBooleanField_descriptor_doesnt_disappear():
     assert value.field == True
 
 
-@pytest.mark.django_db
+
 def test_StrictNullBooleanField_trues():
     """
     Cannot be null
@@ -63,7 +63,7 @@ def test_StrictNullBooleanField_trues():
     assert NullBooleanFieldModel(field=True).field == True
 
 
-@pytest.mark.django_db
+
 def test_StrictNullBooleanField_false():
     """
     Cannot be null
@@ -76,19 +76,19 @@ def test_StrictNullBooleanField_false():
 
 
 
-@pytest.mark.django_db
+
 def test_StrictNullBooleanField_can_be_null():
     NullBooleanFieldModel(field=None)
     NullBooleanFieldModel(field='None')
 
 
-@pytest.mark.django_db
+
 def test_StrictNullBooleanField_invalid():
     with pytest.raises(ValidationError):
         NullBooleanFieldModel(field='troo')
 
 
-@pytest.mark.django_db
+
 def test_StrictNullBooleanField_ok_until_changed():
     """
     Ensure this value cannot change to an invalid state

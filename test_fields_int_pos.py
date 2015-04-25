@@ -11,7 +11,7 @@ from fakeapp.models import PositiveIntegerFieldModel
 from strictmodels import MODEL_MOMMY_MAPPING
 
 
-@pytest.mark.django_db
+
 def test_StrictPositiveIntegerField_null():
     """
     Cannot be null
@@ -35,7 +35,7 @@ def test_StrictPositiveIntegerField_mommy():
     mommy.make()
 
 
-@pytest.mark.django_db
+
 def test_StrictPositiveIntegerField_descriptor_doesnt_disappear():
     """
     don't clobber the descriptor
@@ -51,31 +51,31 @@ def test_StrictPositiveIntegerField_descriptor_doesnt_disappear():
     assert value.field == 12
 
 
-@pytest.mark.django_db
+
 def test_StrictPositiveIntegerField_string():
     with pytest.raises(ValidationError):
         PositiveIntegerFieldModel(field='aaaa')
 
 
-@pytest.mark.django_db
+
 def test_StrictPositiveIntegerField_minvalue():
     with pytest.raises(ValidationError):
         PositiveIntegerFieldModel(field=-1)
 
 
-@pytest.mark.django_db
+
 def test_StrictPositiveIntegerField_maxvalue():
     with pytest.raises(ValidationError):
         PositiveIntegerFieldModel(field=2147483648)
 
 
-@pytest.mark.django_db
+
 def test_StrictPositiveIntegerField_ok():
     model4 = PositiveIntegerFieldModel(field=15)
     assert model4.field == 15
 
 
-@pytest.mark.django_db
+
 def test_StrictPositiveIntegerField_ok_until_changed():
     model5 = PositiveIntegerFieldModel(field=15)
     assert model5.field == 15

@@ -12,7 +12,7 @@ from fakeapp.models import TextFieldModel
 from strictmodels import MODEL_MOMMY_MAPPING
 
 
-@pytest.mark.django_db
+
 def test_StrictTextField_no_args():
     """
     If no args, are given: This field cannot be blank.
@@ -36,7 +36,7 @@ def test_StrictTextField_mommy():
     mommy.make()
 
 
-@pytest.mark.django_db
+
 def test_StrictBigIntegerField_descriptor_doesnt_disappear():
     """
     don't clobber the descriptor
@@ -52,7 +52,7 @@ def test_StrictBigIntegerField_descriptor_doesnt_disappear():
         value.field = None
 
 
-@pytest.mark.django_db
+
 def test_StrictTextField_values():
     """
     Various conversions, based on the equivalent boolean ones.
@@ -69,13 +69,13 @@ def test_StrictTextField_values():
     assert TextFieldModel(field=False).field == 'False'
 
 
-@pytest.mark.django_db
+
 def test_StrictTextField_values_length():
     assert TextFieldModel(field='t'*2550).field == 't'*2550
 
 
 
-@pytest.mark.django_db
+
 def test_StrictTextField_cant_be_null():
     """
     ValidationError: This field cannot be null

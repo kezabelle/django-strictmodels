@@ -11,7 +11,7 @@ from fakeapp.models import PositiveSmallIntegerFieldModel
 from strictmodels import MODEL_MOMMY_MAPPING
 
 
-@pytest.mark.django_db
+
 def test_PositiveSmallIntegerField_null():
     """
     Cannot be null
@@ -43,7 +43,7 @@ def test_PositiveSmallIntegerField_mommy():
         pass
 
 
-@pytest.mark.django_db
+
 def test_PositiveSmallIntegerField_descriptor_doesnt_disappear():
     """
     don't clobber the descriptor
@@ -62,7 +62,7 @@ def test_PositiveSmallIntegerField_descriptor_doesnt_disappear():
 
 
 
-@pytest.mark.django_db
+
 def test_PositiveSmallIntegerField_string():
     """
     Cannot be null
@@ -71,27 +71,27 @@ def test_PositiveSmallIntegerField_string():
         PositiveSmallIntegerFieldModel(field='aaaa')
 
 
-@pytest.mark.django_db
+
 def test_PositiveSmallIntegerField_minvalue():
     PositiveSmallIntegerFieldModel(field=0)
     with pytest.raises(ValidationError):
         PositiveSmallIntegerFieldModel(field=-1)
 
 
-@pytest.mark.django_db
+
 def test_PositiveSmallIntegerField_maxvalue():
     PositiveSmallIntegerFieldModel(field=32767)
     with pytest.raises(ValidationError):
         PositiveSmallIntegerFieldModel(field=32768)
 
 
-@pytest.mark.django_db
+
 def test_PositiveSmallIntegerField_ok():
     model4 = PositiveSmallIntegerFieldModel(field=15)
     assert model4.field == 15
 
 
-@pytest.mark.django_db
+
 def test_PositiveSmallIntegerField_ok_until_changed():
     model5 = PositiveSmallIntegerFieldModel(field=15)
     assert model5.field == 15

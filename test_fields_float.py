@@ -11,7 +11,7 @@ from fakeapp.models import FloatFieldModel
 from strictmodels import MODEL_MOMMY_MAPPING
 
 
-@pytest.mark.django_db
+
 def test_StrictFloatField_no_args():
     """
     If no args, are given: This field cannot be blank.
@@ -35,7 +35,7 @@ def test_StrictFloatField_mommy():
     mommy.make()
 
 
-@pytest.mark.django_db
+
 def test_StrictFloatField_descriptor_doesnt_disappear():
     """
     don't clobber the descriptor
@@ -55,7 +55,7 @@ def test_StrictFloatField_descriptor_doesnt_disappear():
     assert value.field == -1
 
 
-@pytest.mark.django_db
+
 def test_StrictFloatField_cant_be_null():
     """
     ValidationError: This field cannot be null
@@ -64,7 +64,7 @@ def test_StrictFloatField_cant_be_null():
         FloatFieldModel(field=None)
 
 
-@pytest.mark.django_db
+
 def test_StrictFloatField_ok_until_changed():
     """
     Ensure this value cannot change to an invalid state after being set

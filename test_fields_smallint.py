@@ -11,7 +11,7 @@ from fakeapp.models import SmallIntegerFieldModel
 from strictmodels import MODEL_MOMMY_MAPPING
 
 
-@pytest.mark.django_db
+
 def test_StrictSmallIntegerField_null():
     """
     Cannot be null
@@ -43,7 +43,7 @@ def test_StrictSmallIntegerField_mommy():
         pass
 
 
-@pytest.mark.django_db
+
 def test_StrictSmallIntegerField_descriptor_doesnt_disappear():
     """
     don't clobber the descriptor
@@ -62,7 +62,7 @@ def test_StrictSmallIntegerField_descriptor_doesnt_disappear():
 
 
 
-@pytest.mark.django_db
+
 def test_StrictSmallIntegerField_string():
     """
     Cannot be null
@@ -71,13 +71,13 @@ def test_StrictSmallIntegerField_string():
         SmallIntegerFieldModel(field='aaaa')
 
 
-@pytest.mark.django_db
+
 def test_StrictSmallIntegerField_minvalue():
     with pytest.raises(ValidationError):
         SmallIntegerFieldModel(field=-32769)
 
 
-@pytest.mark.django_db
+
 def test_StrictSmallIntegerField_maxvalue():
     """
     Ensure this value is less than or equal to 15
@@ -86,13 +86,13 @@ def test_StrictSmallIntegerField_maxvalue():
         SmallIntegerFieldModel(field=32768)
 
 
-@pytest.mark.django_db
+
 def test_StrictSmallIntegerField_ok():
     model4 = SmallIntegerFieldModel(field=15)
     assert model4.field == 15
 
 
-@pytest.mark.django_db
+
 def test_StrictSmallIntegerField_ok_until_changed():
     model5 = SmallIntegerFieldModel(field=15)
     assert model5.field == 15

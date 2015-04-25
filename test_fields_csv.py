@@ -12,7 +12,7 @@ from fakeapp.models import CommaSeparatedIntegerFieldModel
 from strictmodels import MODEL_MOMMY_MAPPING
 
 
-@pytest.mark.django_db
+
 def test_StrictCsvField_no_args():
     """
     If no args, are given: This field cannot be blank.
@@ -29,14 +29,14 @@ def test_StrictCsvField_save():
 
 
 @pytest.mark.django_db
-def test_StrictURLField_mommy():
+def test_StrictCsvField_mommy():
     mommy = Mommy(model=CommaSeparatedIntegerFieldModel)
     mommy.type_mapping.update(MODEL_MOMMY_MAPPING)
     mommy.prepare()
     mommy.make()
 
 
-@pytest.mark.django_db
+
 def test_StrictBigIntegerField_descriptor_doesnt_disappear():
     """
     don't clobber the descriptor
@@ -52,7 +52,7 @@ def test_StrictBigIntegerField_descriptor_doesnt_disappear():
         value.field = None
 
 
-@pytest.mark.django_db
+
 def test_StrictCsvField_values():
     """
     Various conversions, based on the equivalent boolean ones.
@@ -62,7 +62,7 @@ def test_StrictCsvField_values():
     assert CommaSeparatedIntegerFieldModel(field='1,').field == '1,'
 
 
-@pytest.mark.django_db
+
 def test_StrictCsvField_values_error_length():
     """
     Once an input is too long, error loudly.
@@ -74,7 +74,7 @@ def test_StrictCsvField_values_error_length():
 
 
 
-@pytest.mark.django_db
+
 def test_StrictCsvField_cant_be_null():
     """
     ValidationError: This field cannot be null
@@ -83,7 +83,7 @@ def test_StrictCsvField_cant_be_null():
         CommaSeparatedIntegerFieldModel(field=None)
 
 
-@pytest.mark.django_db
+
 def test_StrictCsvField_ok_until_changed():
     """
     Ensure this value cannot change to an invalid state after being set
