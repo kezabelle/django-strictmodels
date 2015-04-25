@@ -4,6 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
 from django.core.exceptions import ValidationError
+from django.forms import model_to_dict
 from model_mommy.mommy import Mommy
 import pytest
 from fakeapp.models import NullBooleanFieldModel
@@ -17,6 +18,13 @@ def test_StrictNullBooleanField_default():
     """
     value = NullBooleanFieldModel()
     assert value.field is None
+
+
+@pytest.mark.django_db
+def test_StrictNullBooleanField_save():
+    x = NullBooleanFieldModel(field=None)
+    x.save()
+    assert model_to_dict(x) == model_to_dict(NullBooleanFieldModel.objects.get(pk=x.pk))
 
 
 @pytest.mark.django_db

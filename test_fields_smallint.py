@@ -4,6 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
 from django.core.exceptions import ValidationError
+from django.forms import model_to_dict
 from model_mommy.mommy import Mommy
 import pytest
 from fakeapp.models import SmallIntegerFieldModel
@@ -18,6 +19,12 @@ def test_StrictSmallIntegerField_null():
     with pytest.raises(ValidationError):
         SmallIntegerFieldModel()
 
+
+@pytest.mark.django_db
+def test_StrictSmallIntegerField_save():
+    x = SmallIntegerFieldModel(field='4')
+    x.save()
+    assert model_to_dict(x) == model_to_dict(SmallIntegerFieldModel.objects.get(pk=x.pk))
 
 
 @pytest.mark.django_db

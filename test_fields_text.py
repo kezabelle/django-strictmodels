@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 from __future__ import division
 from decimal import Decimal
 from django.core.exceptions import ValidationError
+from django.forms import model_to_dict
 from model_mommy.mommy import Mommy
 import pytest
 from fakeapp.models import TextFieldModel
@@ -18,6 +19,13 @@ def test_StrictTextField_no_args():
     """
     with pytest.raises(ValidationError):
         value = TextFieldModel()
+
+
+@pytest.mark.django_db
+def test_StrictTextField_save():
+    x = TextFieldModel(field='test')
+    x.save()
+    assert model_to_dict(x) == model_to_dict(TextFieldModel.objects.get(pk=x.pk))
 
 
 @pytest.mark.django_db

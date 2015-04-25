@@ -3,8 +3,8 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
-from decimal import Decimal
 from django.core.exceptions import ValidationError
+from django.forms import model_to_dict
 from model_mommy.mommy import Mommy
 import os
 import pytest
@@ -24,6 +24,13 @@ def test_StrictFilePathField_no_args():
     """
     with pytest.raises(ValidationError):
         value = FilePathFieldModel()
+
+
+@pytest.mark.django_db
+def test_StrictFilePathField_save():
+    x = FilePathFieldModel(field=GOOD_FILE)
+    x.save()
+    assert model_to_dict(x) == model_to_dict(FilePathFieldModel.objects.get(pk=x.pk))
 
 
 @pytest.mark.django_db

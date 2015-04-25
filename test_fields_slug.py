@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 from __future__ import division
 from decimal import Decimal
 from django.core.exceptions import ValidationError
+from django.forms import model_to_dict
 from model_mommy.mommy import Mommy
 import pytest
 from fakeapp.models import SlugFieldModel
@@ -18,6 +19,13 @@ def test_StrictSlugField_no_args():
     """
     with pytest.raises(ValidationError):
         value = SlugFieldModel()
+
+
+@pytest.mark.django_db
+def test_StrictSlugField_save():
+    x = SlugFieldModel(field='t-t-t')
+    x.save()
+    assert model_to_dict(x) == model_to_dict(SlugFieldModel.objects.get(pk=x.pk))
 
 
 @pytest.mark.django_db

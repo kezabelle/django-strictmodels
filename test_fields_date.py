@@ -4,6 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
 from django.core.exceptions import ValidationError
+from django.forms import model_to_dict
 from django.utils.datetime_safe import date
 from model_mommy.mommy import Mommy
 import pytest
@@ -18,6 +19,13 @@ def test_StrictDateField_no_args():
     """
     with pytest.raises(ValidationError):
         value = DateFieldModel()
+
+
+@pytest.mark.django_db
+def test_StrictDateField_save():
+    x = DateFieldModel(field=date.today())
+    x.save()
+    assert model_to_dict(x) == model_to_dict(DateFieldModel.objects.get(pk=x.pk))
 
 
 @pytest.mark.django_db

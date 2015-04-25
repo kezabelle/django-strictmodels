@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 from __future__ import division
 from decimal import Decimal
 from django.core.exceptions import ValidationError
+from django.forms import model_to_dict
 from model_mommy.mommy import Mommy
 import pytest
 from fakeapp.models import CommaSeparatedIntegerFieldModel
@@ -18,6 +19,13 @@ def test_StrictCsvField_no_args():
     """
     with pytest.raises(ValidationError):
         value = CommaSeparatedIntegerFieldModel()
+
+
+@pytest.mark.django_db
+def test_StrictCsvField_save():
+    x = CommaSeparatedIntegerFieldModel(field='1,2,3')
+    x.save()
+    assert model_to_dict(x) == model_to_dict(CommaSeparatedIntegerFieldModel.objects.get(pk=x.pk))
 
 
 @pytest.mark.django_db

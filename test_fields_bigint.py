@@ -4,6 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
 from django.core.exceptions import ValidationError
+from django.forms import model_to_dict
 from model_mommy.mommy import Mommy
 import pytest
 from fakeapp.models import BigIntegerFieldModel, NullBigIntegerFieldModel
@@ -18,6 +19,12 @@ def test_StrictBigIntegerField_null():
     with pytest.raises(ValidationError):
         BigIntegerFieldModel()
 
+
+@pytest.mark.django_db
+def test_StrictBigIntegerField_save():
+    x = BigIntegerFieldModel(field=5)
+    x.save()
+    assert model_to_dict(x) == model_to_dict(BigIntegerFieldModel.objects.get(pk=x.pk))
 
 
 @pytest.mark.django_db

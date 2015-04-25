@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 from __future__ import division
 from django.core.exceptions import ValidationError
 from datetime import time
+from django.forms import model_to_dict
 from model_mommy.mommy import Mommy
 import pytest
 from fakeapp.models import TimeFieldModel
@@ -18,6 +19,13 @@ def test_StrictTimeField_no_args():
     """
     with pytest.raises(ValidationError):
         value = TimeFieldModel()
+
+
+@pytest.mark.django_db
+def test_StrictTimeField_save():
+    x = TimeFieldModel(field=time())
+    x.save()
+    assert model_to_dict(x) == model_to_dict(TimeFieldModel.objects.get(pk=x.pk))
 
 
 @pytest.mark.django_db

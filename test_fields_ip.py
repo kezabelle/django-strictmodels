@@ -4,6 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
 from django.core.exceptions import ValidationError
+from django.forms import model_to_dict
 from model_mommy.mommy import Mommy
 import pytest
 from fakeapp.models import GenericIPAddressFieldModel
@@ -17,6 +18,13 @@ def test_StrictGenericIPAddressField_no_args():
     """
     with pytest.raises(ValidationError):
         value = GenericIPAddressFieldModel()
+
+
+@pytest.mark.django_db
+def test_StrictGenericIPAddressField_save():
+    x = GenericIPAddressFieldModel(field='127.0.0.1')
+    x.save()
+    assert model_to_dict(x) == model_to_dict(GenericIPAddressFieldModel.objects.get(pk=x.pk))
 
 
 @pytest.mark.django_db
