@@ -26,31 +26,39 @@ def test_StrictBigIntegerField_save():
     assert model_to_dict(x) == model_to_dict(BigIntegerFieldModel.objects.get(pk=x.pk))
 
 
+@pytest.mark.django_db
 def test_StrictBigIntegerField_form_with_instance_valid():
     x = BigIntegerFieldModel(field=5)
     form_class = modelform_factory(model=BigIntegerFieldModel, fields=['field'])
     form = form_class(data={'field': 6}, instance=x)
     assert form.is_valid() is True
     assert form.errors == {}
+    obj = form.save()
+    assert obj == x
 
 
-@pytest.mark.xfail
+def test_StrictBigIntegerField_form_with_instance_invalid():
+    x = BigIntegerFieldModel(field=5)
+    form_class = modelform_factory(model=BigIntegerFieldModel, fields=['field'])
+    form = form_class(data={'field': 9223372036854775808}, instance=x)
+    assert form.is_valid() is False
+    assert form.errors == {'field': ['Ensure this value is less than or equal to 9223372036854775807.']}
+
+
+@pytest.mark.django_db
 def test_StrictBigIntegerField_form_without_instance_valid():
     form_class = modelform_factory(model=BigIntegerFieldModel, fields=['field'])
     form = form_class(data={'field': 6})
     assert form.is_valid() is True
     assert form.errors == {}
+    assert form.save().field == 6
 
 
-@pytest.mark.xfail
-def test_StrictBigIntegerField_form_with_instance_invalid():
-    """
-    Can I figure out a way to fix this?"""
-    x = BigIntegerFieldModel(field=5)
+def test_StrictBigIntegerField_form_without_instance_invalid():
     form_class = modelform_factory(model=BigIntegerFieldModel, fields=['field'])
-    form = form_class(data={'field': 4}, instance=x)
-    assert form.is_valid() is True
-    assert form.errors == {}
+    form = form_class(data={'field': 9223372036854775808})
+    assert form.is_valid() is False
+    assert form.errors == {'field': ['Ensure this value is less than or equal to 9223372036854775807.']}
 
 
 @pytest.mark.django_db
