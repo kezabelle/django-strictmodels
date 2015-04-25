@@ -50,8 +50,8 @@ def test_StrictCharField_descriptor_doesnt_disappear():
     assert value.field == 't'*255
     value.field = 'z'*10
     assert value.field == 'z'*10
-    with pytest.raises(ValidationError):
-        value.field = None
+    value.field = None
+    assert value.field is None
 
 
 
@@ -84,12 +84,11 @@ def test_StrictCharField_values_error_length():
 
 
 
-def test_StrictCharField_cant_be_null():
+def test_StrictCharField_null_no_cleaning():
     """
-    ValidationError: This field cannot be null
+    No validation happens on Nones because of Django doing setattr(None)
     """
-    with pytest.raises(ValidationError):
-        CharFieldModel(field=None)
+    CharFieldModel(field=None)
 
 
 

@@ -14,11 +14,7 @@ from strictmodels import MODEL_MOMMY_MAPPING
 
 
 def test_StrictDecimalField_no_args():
-    """
-    If no args, are given: This field cannot be blank.
-    """
-    with pytest.raises(ValidationError):
-        value = DecimalFieldModel()
+    value = DecimalFieldModel()
 
 
 @pytest.mark.django_db
@@ -57,12 +53,8 @@ def test_StrictDecimalField_descriptor_doesnt_disappear():
 
 
 
-def test_StrictDecimalField_cant_be_null():
-    """
-    ValidationError: This field cannot be null
-    """
-    with pytest.raises(ValidationError):
-        DecimalFieldModel(field=None)
+def test_StrictDecimalField_null_skips_cleaning():
+    DecimalFieldModel(field=None)
 
 
 

@@ -13,11 +13,7 @@ from strictmodels import MODEL_MOMMY_MAPPING
 
 
 def test_StrictIntegerField_null():
-    """
-    Cannot be null
-    """
-    with pytest.raises(ValidationError):
-        IntegerFieldModel()
+    IntegerFieldModel()
 
 
 @pytest.mark.django_db

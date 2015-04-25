@@ -23,7 +23,16 @@ class FieldCleaningDescriptor(object):
         return instance.__dict__[self.field.name]
 
     def __set__(self, instance, value):
-        new_value = self.field.clean(value=value, model_instance=instance)
+        """
+        We special-case None to not do any validation (regardless of nullability)
+        because of the various ways which Django likes to instantiate objects
+        with null values. Mostly in ModelBase.__init__,
+        forms.models.construct_instance etc
+        """
+        if value is None:
+            new_value = None
+        else:
+            new_value = self.field.clean(value=value, model_instance=instance)
         instance.__dict__[self.field.name] = new_value
         return new_value
 

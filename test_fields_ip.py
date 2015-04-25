@@ -13,11 +13,7 @@ from strictmodels import MODEL_MOMMY_MAPPING
 
 
 def test_StrictGenericIPAddressField_no_args():
-    """
-    If no args, are given: This field cannot be blank.
-    """
-    with pytest.raises(ValidationError):
-        value = GenericIPAddressFieldModel()
+    value = GenericIPAddressFieldModel()
 
 
 @pytest.mark.django_db
@@ -49,8 +45,7 @@ def test_StrictGenericIPAddressField_descriptor_doesnt_disappear():
     assert value.field == '127.0.0.2'
     value.field = '192.168.0.1'
     assert value.field == '192.168.0.1'
-    with pytest.raises(ValidationError):
-        value.field = None
+    value.field = None
 
 
 
@@ -68,12 +63,8 @@ def test_StrictGenericIPAddressField_values_error_length():
 
 
 
-def test_StrictGenericIPAddressField_cant_be_null():
-    """
-    ValidationError: This field cannot be null
-    """
-    with pytest.raises(ValidationError):
-        GenericIPAddressFieldModel(field=None)
+def test_StrictGenericIPAddressField_null_skips_cleaning():
+    GenericIPAddressFieldModel(field=None)
 
 
 

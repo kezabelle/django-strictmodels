@@ -50,8 +50,7 @@ def test_StrictBigIntegerField_descriptor_doesnt_disappear():
     assert value.field == 'https://abc.com'
     value.field = 'ftp://bbc.bbc'
     assert value.field == 'ftp://bbc.bbc'
-    with pytest.raises(ValidationError):
-        value.field = None
+    value.field = None
 
 
 
@@ -80,12 +79,8 @@ def test_StrictURLField_values_error_length():
 
 
 
-def test_StrictURLField_cant_be_null():
-    """
-    ValidationError: This field cannot be null
-    """
-    with pytest.raises(ValidationError):
-        URLFieldModel(field=None)
+def test_StrictURLField_null_skips_cleaning():
+    URLFieldModel(field=None)
 
 
 

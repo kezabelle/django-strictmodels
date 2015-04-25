@@ -50,8 +50,7 @@ def test_StrictBigIntegerField_descriptor_doesnt_disappear():
     assert value.field == 'a-b-c'
     value.field = 'z'*10
     assert value.field == 'z'*10
-    with pytest.raises(ValidationError):
-        value.field = None
+    value.field = None
 
 
 
@@ -84,12 +83,8 @@ def test_StrictSlugField_values_error_length():
 
 
 
-def test_StrictSlugField_cant_be_null():
-    """
-    ValidationError: This field cannot be null
-    """
-    with pytest.raises(ValidationError):
-        SlugFieldModel(field=None)
+def test_StrictSlugField_null_skips_cleaning():
+    SlugFieldModel(field=None)
 
 
 

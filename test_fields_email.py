@@ -50,8 +50,7 @@ def test_StrictBigIntegerField_descriptor_doesnt_disappear():
     assert value.field == 'abc@abc.com'
     value.field = 'bbc@bbc.bbc'
     assert value.field == 'bbc@bbc.bbc'
-    with pytest.raises(ValidationError):
-        value.field = None
+    value.field = None
 
 
 
@@ -80,12 +79,8 @@ def test_StrictEmailField_values_error_length():
 
 
 
-def test_StrictEmailField_cant_be_null():
-    """
-    ValidationError: This field cannot be null
-    """
-    with pytest.raises(ValidationError):
-        EmailFieldModel(field=None)
+def test_StrictEmailField_null_skips_cleaning():
+    EmailFieldModel(field=None)
 
 
 

@@ -12,12 +12,11 @@ from strictmodels import MODEL_MOMMY_MAPPING
 
 
 
-def test_StrictBigIntegerField_null():
+def test_StrictBigIntegerField_init():
     """
-    Cannot be null
+    No validation is performed, everyone is null
     """
-    with pytest.raises(ValidationError):
-        BigIntegerFieldModel()
+    assert BigIntegerFieldModel().field is None
 
 
 @pytest.mark.django_db

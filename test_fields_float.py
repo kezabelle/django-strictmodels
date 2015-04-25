@@ -13,11 +13,7 @@ from strictmodels import MODEL_MOMMY_MAPPING
 
 
 def test_StrictFloatField_no_args():
-    """
-    If no args, are given: This field cannot be blank.
-    """
-    with pytest.raises(ValidationError):
-        value = FloatFieldModel()
+    value = FloatFieldModel()
 
 
 @pytest.mark.django_db
@@ -56,12 +52,8 @@ def test_StrictFloatField_descriptor_doesnt_disappear():
 
 
 
-def test_StrictFloatField_cant_be_null():
-    """
-    ValidationError: This field cannot be null
-    """
-    with pytest.raises(ValidationError):
-        FloatFieldModel(field=None)
+def test_StrictFloatField_null_skips_cleaning():
+    FloatFieldModel(field=None)
 
 
 

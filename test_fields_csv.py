@@ -48,8 +48,7 @@ def test_StrictBigIntegerField_descriptor_doesnt_disappear():
     assert value.field == '1,2,3'
     value.field = '4,5'
     assert value.field == '4,5'
-    with pytest.raises(ValidationError):
-        value.field = None
+    value.field = None
 
 
 
@@ -75,12 +74,8 @@ def test_StrictCsvField_values_error_length():
 
 
 
-def test_StrictCsvField_cant_be_null():
-    """
-    ValidationError: This field cannot be null
-    """
-    with pytest.raises(ValidationError):
-        CommaSeparatedIntegerFieldModel(field=None)
+def test_StrictCsvField_null_no_cleaning():
+    CommaSeparatedIntegerFieldModel(field=None)
 
 
 

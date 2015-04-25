@@ -12,12 +12,11 @@ from strictmodels import MODEL_MOMMY_MAPPING
 
 
 
-def test_StrictBooleanField_default():
+def test_StrictBooleanField_init():
     """
-    Default is null
+    No validation is performed, everyone is null
     """
-    value = BooleanFieldModel()
-    assert value.field == True
+    assert BooleanFieldModel().field is True
 
 
 @pytest.mark.django_db
@@ -77,9 +76,11 @@ def test_StrictBooleanField_false():
 
 
 
-def test_StrictBooleanField_cant_be_null():
-    with pytest.raises(ValidationError):
-        BooleanFieldModel(field=None)
+def test_StrictBooleanField_can_be_null():
+    """
+    No validation happens on Nones because of Django doing setattr(None)
+    """
+    BooleanFieldModel(field=None)
 
 
 

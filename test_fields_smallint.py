@@ -13,11 +13,7 @@ from strictmodels import MODEL_MOMMY_MAPPING
 
 
 def test_StrictSmallIntegerField_null():
-    """
-    Cannot be null
-    """
-    with pytest.raises(ValidationError):
-        SmallIntegerFieldModel()
+    SmallIntegerFieldModel()
 
 
 @pytest.mark.django_db

@@ -55,17 +55,12 @@ def test_StrictFilePathField_descriptor_doesnt_disappear():
     assert value.field == GOOD_FILE
     value.field = GOOD_FILE2
     assert value.field == GOOD_FILE2
-    with pytest.raises(ValidationError):
-        value.field = None
+    value.field = None
 
 
 
-def test_StrictFilePathField_cant_be_null():
-    """
-    ValidationError: This field cannot be null
-    """
-    with pytest.raises(ValidationError):
-        FilePathFieldModel(field=None)
+def test_StrictFilePathField_null_skips_cleaning():
+    FilePathFieldModel(field=None)
 
 
 

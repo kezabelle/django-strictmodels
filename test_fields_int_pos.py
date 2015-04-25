@@ -13,11 +13,7 @@ from strictmodels import MODEL_MOMMY_MAPPING
 
 
 def test_StrictPositiveIntegerField_null():
-    """
-    Cannot be null
-    """
-    with pytest.raises(ValidationError):
-        PositiveIntegerFieldModel()
+    PositiveIntegerFieldModel()
 
 
 @pytest.mark.django_db

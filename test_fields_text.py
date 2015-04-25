@@ -48,8 +48,7 @@ def test_StrictBigIntegerField_descriptor_doesnt_disappear():
     assert value.field == 't'*255
     value.field = 'z'*10
     assert value.field == 'z'*10
-    with pytest.raises(ValidationError):
-        value.field = None
+    value.field = None
 
 
 
@@ -76,12 +75,8 @@ def test_StrictTextField_values_length():
 
 
 
-def test_StrictTextField_cant_be_null():
-    """
-    ValidationError: This field cannot be null
-    """
-    with pytest.raises(ValidationError):
-        TextFieldModel(field=None)
+def test_StrictTextField_null_skips_cleaning():
+    TextFieldModel(field=None)
 
 
 @pytest.mark.django_db

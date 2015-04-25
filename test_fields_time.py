@@ -14,11 +14,7 @@ from strictmodels import MODEL_MOMMY_MAPPING
 
 
 def test_StrictTimeField_no_args():
-    """
-    If no args, are given: This field cannot be blank.
-    """
-    with pytest.raises(ValidationError):
-        value = TimeFieldModel()
+    value = TimeFieldModel()
 
 
 @pytest.mark.django_db
@@ -58,12 +54,8 @@ def test_StrictTimeField_descriptor_doesnt_disappear():
 
 
 
-def test_StrictTimeField_cant_be_null():
-    """
-    ValidationError: This field cannot be null
-    """
-    with pytest.raises(ValidationError):
-        TimeFieldModel(field=None)
+def test_StrictTimeField_null_skips_cleaning():
+    TimeFieldModel(field=None)
 
 
 
