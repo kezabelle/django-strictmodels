@@ -4,7 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
 from django.core.exceptions import ValidationError
-from django.forms import model_to_dict
+from django.forms import model_to_dict, modelform_factory
 from model_mommy.mommy import Mommy
 import os
 import pytest
@@ -19,11 +19,7 @@ BAD_FILE = os.path.join(HERE, 'this_file_should_never_exist_hopefully.exe')
 
 
 def test_StrictFilePathField_no_args():
-    """
-    If no args, are given: This field cannot be blank.
-    """
-    with pytest.raises(ValidationError):
-        value = FilePathFieldModel()
+    value = FilePathFieldModel()
 
 
 @pytest.mark.django_db
@@ -42,6 +38,41 @@ def test_StrictFilePathField_mommy():
     with pytest.raises(TypeError):
         mommy.make()
 
+
+@pytest.mark.django_db
+def test_StrictFilePathField_form_with_instance_valid():
+    x = FilePathFieldModel(field=GOOD_FILE)
+    form_class = modelform_factory(model=FilePathFieldModel, fields=['field'])
+    form = form_class(data={'field': GOOD_FILE2}, instance=x)
+    assert form.is_valid() is True
+    assert form.errors == {}
+    assert form.save().field == GOOD_FILE2
+
+
+def test_StrictFilePathField_form_with_instance_invalid():
+    x = FilePathFieldModel(field=GOOD_FILE)
+    form_class = modelform_factory(model=FilePathFieldModel, fields=['field'])
+    form = form_class(data={'field': BAD_FILE}, instance=x)
+    assert form.is_valid() is False
+    assert form.errors == {'field': ['Select a valid choice. {BAD} is not one '
+                                     'of the available choices.'.format(BAD=BAD_FILE)]}
+
+
+@pytest.mark.django_db
+def test_StrictFilePathField_form_without_instance_valid():
+    form_class = modelform_factory(model=FilePathFieldModel, fields=['field'])
+    form = form_class(data={'field': GOOD_FILE})
+    assert form.is_valid() is True
+    assert form.errors == {}
+    assert form.save().field == GOOD_FILE
+
+
+def test_StrictFilePathField_form_without_instance_invalid():
+    form_class = modelform_factory(model=FilePathFieldModel, fields=['field'])
+    form = form_class(data={'field': BAD_FILE})
+    assert form.is_valid() is False
+    assert form.errors == {'field': ['Select a valid choice. {BAD} is not one '
+                                     'of the available choices.'.format(BAD=BAD_FILE)]}
 
 
 def test_StrictFilePathField_descriptor_doesnt_disappear():

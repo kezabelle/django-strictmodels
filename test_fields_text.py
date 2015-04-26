@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from __future__ import division
 from decimal import Decimal
 from django.core.exceptions import ValidationError
-from django.forms import model_to_dict
+from django.forms import model_to_dict, modelform_factory
 from model_mommy.mommy import Mommy
 import pytest
 from fakeapp.models import TextFieldModel
@@ -14,11 +14,7 @@ from strictmodels import MODEL_MOMMY_MAPPING
 
 
 def test_StrictTextField_no_args():
-    """
-    If no args, are given: This field cannot be blank.
-    """
-    with pytest.raises(ValidationError):
-        value = TextFieldModel()
+    value = TextFieldModel()
 
 
 @pytest.mark.django_db
@@ -32,20 +28,63 @@ def test_StrictTextField_save():
 def test_StrictTextField_mommy():
     mommy = Mommy(model=TextFieldModel)
     mommy.type_mapping.update(MODEL_MOMMY_MAPPING)
-    mommy.prepare()
-    mommy.make()
+    try:
+        mommy.prepare()
+    except ValidationError:
+        # the mapping + validator worked but mommy shoved in too much data.
+        pass
+    try:
+        mommy.make()
+    except ValidationError:
+        # the mapping + validator worked but mommy shoved in too much data.
+        pass
 
 
+@pytest.mark.django_db
+def test_StrictTextField_form_with_instance_valid():
+    x = TextFieldModel(field=5)
+    form_class = modelform_factory(model=TextFieldModel, fields=['field'])
+    form = form_class(data={'field': 6}, instance=x)
+    assert form.is_valid() is True
+    assert form.errors == {}
+    assert form.save().field == '6'
 
-def test_StrictBigIntegerField_descriptor_doesnt_disappear():
+
+@pytest.mark.django_db
+def test_StrictTextField_form_with_instance_invalid():
+    x = TextFieldModel(field=5)
+    form_class = modelform_factory(model=TextFieldModel, fields=['field'])
+    form = form_class(data={'field': 't' * 200}, instance=x)
+    assert form.is_valid() is False
+    assert form.errors == {'field': ['Ensure this value has at most 100 characters (it has 200).']}
+
+
+@pytest.mark.django_db
+def test_StrictTextField_form_without_instance_valid():
+    form_class = modelform_factory(model=TextFieldModel, fields=['field'])
+    form = form_class(data={'field': 6})
+    assert form.is_valid() is True
+    assert form.errors == {}
+    assert form.save().field =='6'
+
+
+def test_StrictTextField_form_without_instance_invalid():
+    form_class = modelform_factory(model=TextFieldModel, fields=['field'])
+    form = form_class(data={'field': 't'*200})
+    assert form.is_valid() is False
+    assert form.errors == {'field': ['Ensure this value has at most 100 characters (it has 200).']}
+
+
+def test_StrictTextField_descriptor_doesnt_disappear():
     """
     don't clobber the descriptor
     """
     value = TextFieldModel(field='t')
     assert value.field == 't'
-    value.field = 't'*255
-    assert value.field == 't'*255
-    assert value.field == 't'*255
+    value.field = 't'*99
+    with pytest.raises(ValidationError):
+        value.field = 't'*101
+    assert value.field == 't'*99
     value.field = 'z'*10
     assert value.field == 'z'*10
     value.field = None
@@ -70,7 +109,8 @@ def test_StrictTextField_values():
 
 
 def test_StrictTextField_values_length():
-    assert TextFieldModel(field='t'*2550).field == 't'*2550
+    with pytest.raises(ValidationError):
+        assert TextFieldModel(field='t'*2550).field == 't'*2550
 
 
 
@@ -82,8 +122,9 @@ def test_StrictTextField_null_skips_cleaning():
 @pytest.mark.django_db
 def test_StrictTextField_create_via_queryset():
     assert TextFieldModel.objects.count() == 0
-    TextFieldModel.objects.create(field='t'*2560)
-    assert TextFieldModel.objects.count() == 1
+    with pytest.raises(ValidationError):
+        TextFieldModel.objects.create(field='t'*200)
+    assert TextFieldModel.objects.count() == 0
 
 
 @pytest.mark.django_db

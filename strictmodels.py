@@ -1,6 +1,9 @@
 from django.core.exceptions import FieldError, ValidationError
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import (MinValueValidator,
+                                    MaxValueValidator,
+                                    MaxLengthValidator)
 from django.db.models import fields
+from django.forms import ModelForm
 from django.utils import six
 from django.utils.encoding import smart_text
 from django.utils.translation import ugettext_lazy as _
@@ -9,6 +12,24 @@ __version_info__ = '0.1.0'
 __version__ = '0.1.0'
 version = '0.1.0'
 def get_version(): return version  # noqa
+
+
+class SafeModelForm(ModelForm):
+    """
+    This is necessary to avoid exceptions bubbling and not being caught
+    by the is_valid call.
+    See https://code.djangoproject.com/ticket/24706#ticket
+    """
+    def _post_clean(self):
+        try:
+            super(SafeModelForm, self)._post_clean()
+        except ValidationError as e:
+            # This is necessary to avoid getting
+            # AttributeError: 'ValidationError' object has no attribute 'error_dict'
+            # when trying to _update_errors
+            errors = {}
+            e.update_error_dict(errors)
+            self._update_errors(ValidationError(errors))
 
 
 class FieldCleaningDescriptor(object):
@@ -30,9 +51,23 @@ class FieldCleaningDescriptor(object):
         forms.models.construct_instance etc
         """
         if value is None:
-            new_value = None
+            new_value = value
         else:
-            new_value = self.field.clean(value=value, model_instance=instance)
+            # check whether it's the default value for the field, which we also
+            # don't clean because of charfields etc.
+            field_default = self.field.get_default()
+            if value == field_default:
+                new_value = field_default
+            else:
+                # if not None/the field's default, validate it ...
+                try:
+                    new_value = self.field.clean(value=value, model_instance=instance)
+                except ValidationError as exc:
+                    # catch and re-raise it as a dict mapping key: exception
+                    # so that forms will attribute it to the correct field.
+                    raise ValidationError(message={
+                        self.field.name: exc
+                    })
         instance.__dict__[self.field.name] = new_value
         return new_value
 
@@ -205,6 +240,11 @@ class StrictSmallIntegerField(fields.SmallIntegerField):
 
 
 class StrictTextField(fields.TextField):
+    def __init__(self, *args, **kwargs):
+        super(StrictTextField, self).__init__(*args, **kwargs)
+        if not self._validators and self.max_length:
+            self.validators.append(MaxLengthValidator(self.max_length))
+
     def to_python(self, value):
         # why the hell isn't this in Django?
         if isinstance(value, six.string_types) or value is None:

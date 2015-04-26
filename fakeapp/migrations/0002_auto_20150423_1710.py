@@ -111,7 +111,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='TextFieldModel',
             name='field',
-            field=strictmodels.StrictTextField(),
+            field=strictmodels.StrictTextField(max_length=100),
         ),
         migrations.AlterField(
             model_name='TimeFieldModel',

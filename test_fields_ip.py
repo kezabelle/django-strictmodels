@@ -4,7 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
 from django.core.exceptions import ValidationError
-from django.forms import model_to_dict
+from django.forms import model_to_dict, modelform_factory
 from model_mommy.mommy import Mommy
 import pytest
 from fakeapp.models import GenericIPAddressFieldModel
@@ -30,6 +30,39 @@ def test_StrictGenericIPAddressField_mommy():
     mommy.prepare()
     mommy.make()
 
+
+@pytest.mark.django_db
+def test_StrictGenericIPAddressField_form_with_instance_valid():
+    x = GenericIPAddressFieldModel(field='127.0.0.1')
+    form_class = modelform_factory(model=GenericIPAddressFieldModel, fields=['field'])
+    form = form_class(data={'field': '255.255.255.255'}, instance=x)
+    assert form.is_valid() is True
+    assert form.errors == {}
+    assert form.save().field == '255.255.255.255'
+
+
+def test_StrictGenericIPAddressField_form_with_instance_invalid():
+    x = GenericIPAddressFieldModel(field='127.0.0.1')
+    form_class = modelform_factory(model=GenericIPAddressFieldModel, fields=['field'])
+    form = form_class(data={'field': 'ghost'}, instance=x)
+    assert form.is_valid() is False
+    assert form.errors == {'field': ['Enter a valid IPv4 or IPv6 address.']}
+
+
+@pytest.mark.django_db
+def test_StrictGenericIPAddressField_form_without_instance_valid():
+    form_class = modelform_factory(model=GenericIPAddressFieldModel, fields=['field'])
+    form = form_class(data={'field': '255.255.255.255'})
+    assert form.is_valid() is True
+    assert form.errors == {}
+    assert form.save().field == '255.255.255.255'
+
+
+def test_StrictGenericIPAddressField_form_without_instance_invalid():
+    form_class = modelform_factory(model=GenericIPAddressFieldModel, fields=['field'])
+    form = form_class(data={'field': 'shark'})
+    assert form.is_valid() is False
+    assert form.errors == {'field': ['Enter a valid IPv4 or IPv6 address.']}
 
 
 def test_StrictGenericIPAddressField_descriptor_doesnt_disappear():

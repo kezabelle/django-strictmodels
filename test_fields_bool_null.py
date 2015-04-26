@@ -4,7 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
 from django.core.exceptions import ValidationError
-from django.forms import model_to_dict
+from django.forms import model_to_dict, modelform_factory
 from model_mommy.mommy import Mommy
 import pytest
 from fakeapp.models import NullBooleanFieldModel
@@ -34,6 +34,23 @@ def test_StrictNullBooleanField_mommy():
     mommy.prepare()
     mommy.make()
 
+@pytest.mark.django_db
+def test_StrictNullBooleanField_form_with_instance_valid():
+    x = NullBooleanFieldModel(field=None)
+    form_class = modelform_factory(model=NullBooleanFieldModel, fields=['field'])
+    form = form_class(data={'field': '2'}, instance=x)
+    assert form.is_valid() is True
+    assert form.errors == {}
+    assert form.save().field is True
+
+
+@pytest.mark.django_db
+def test_StrictNullBooleanField_form_without_instance_valid():
+    form_class = modelform_factory(model=NullBooleanFieldModel, fields=['field'])
+    form = form_class(data={'field': 6})
+    assert form.is_valid() is True
+    assert form.errors == {}
+    assert form.save().field is None
 
 
 def test_StrictNullBooleanField_descriptor_doesnt_disappear():

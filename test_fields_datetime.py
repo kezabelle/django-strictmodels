@@ -3,8 +3,9 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
+from datetime import timedelta
 from django.core.exceptions import ValidationError
-from django.forms import model_to_dict
+from django.forms import model_to_dict, modelform_factory
 from django.utils.datetime_safe import datetime
 from model_mommy.mommy import Mommy
 import pytest
@@ -31,6 +32,43 @@ def test_StrictDateTimeField_mommy():
     mommy.prepare()
     mommy.make()
 
+
+@pytest.mark.django_db
+def test_StrictDateTimeField_form_with_instance_valid():
+    today = datetime.today()
+    future = today + timedelta(days=2)
+    x = DateTimeFieldModel(field=today)
+    form_class = modelform_factory(model=DateTimeFieldModel, fields=['field'])
+    form = form_class(data={'field': future}, instance=x)
+    assert form.is_valid() is True
+    assert form.errors == {}
+    assert form.save().field == future
+
+
+def test_StrictDateTimeField_form_with_instance_invalid():
+    today = datetime.today()
+    x = DateTimeFieldModel(field=today)
+    form_class = modelform_factory(model=DateTimeFieldModel, fields=['field'])
+    form = form_class(data={'field': 9223372036854775808}, instance=x)
+    assert form.is_valid() is False
+    assert form.errors == {'field': ['Enter a valid date/time.']}
+
+
+@pytest.mark.django_db
+def test_StrictDateTimeField_form_without_instance_valid():
+    today = datetime.today()
+    form_class = modelform_factory(model=DateTimeFieldModel, fields=['field'])
+    form = form_class(data={'field': today})
+    assert form.is_valid() is True
+    assert form.errors == {}
+    assert form.save().field == today
+
+
+def test_StrictDateTimeField_form_without_instance_invalid():
+    form_class = modelform_factory(model=DateTimeFieldModel, fields=['field'])
+    form = form_class(data={'field': 9223372036854775808})
+    assert form.is_valid() is False
+    assert form.errors == {'field': ['Enter a valid date/time.']}
 
 
 def test_StrictDateTimeField_descriptor_doesnt_disappear():

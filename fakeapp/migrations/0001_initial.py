@@ -148,7 +148,7 @@ class Migration(migrations.Migration):
             name='TextFieldModel',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('field', models.TextField()),
+                ('field', models.TextField(max_length=100)),
             ],
         ),
         migrations.CreateModel(

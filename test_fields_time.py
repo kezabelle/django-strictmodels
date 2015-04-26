@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from __future__ import division
 from django.core.exceptions import ValidationError
 from datetime import time
-from django.forms import model_to_dict
+from django.forms import model_to_dict, modelform_factory
 from model_mommy.mommy import Mommy
 import pytest
 from fakeapp.models import TimeFieldModel
@@ -31,6 +31,41 @@ def test_StrictTimeField_mommy():
     mommy.prepare()
     mommy.make()
 
+
+@pytest.mark.django_db
+def test_StrictTimeField_form_with_instance_valid():
+    today = time()
+    x = TimeFieldModel(field=today)
+    form_class = modelform_factory(model=TimeFieldModel, fields=['field'])
+    form = form_class(data={'field': '12:12'}, instance=x)
+    assert form.is_valid() is True
+    assert form.errors == {}
+    assert form.save().field == time(12, 12)
+
+
+def test_StrictTimeField_form_with_instance_invalid():
+    today = time()
+    x = TimeFieldModel(field=today)
+    form_class = modelform_factory(model=TimeFieldModel, fields=['field'])
+    form = form_class(data={'field': 9223372036854775808}, instance=x)
+    assert form.is_valid() is False
+    assert form.errors == {'field': ['Enter a valid time.']}
+
+
+@pytest.mark.django_db
+def test_StrictTimeField_form_without_instance_valid():
+    form_class = modelform_factory(model=TimeFieldModel, fields=['field'])
+    form = form_class(data={'field': '12:12'})
+    assert form.is_valid() is True
+    assert form.errors == {}
+    assert form.save().field == time(12, 12)
+
+
+def test_StrictTimeField_form_without_instance_invalid():
+    form_class = modelform_factory(model=TimeFieldModel, fields=['field'])
+    form = form_class(data={'field': 9223372036854775808})
+    assert form.is_valid() is False
+    assert form.errors == {'field': ['Enter a valid time.']}
 
 
 def test_StrictTimeField_descriptor_doesnt_disappear():

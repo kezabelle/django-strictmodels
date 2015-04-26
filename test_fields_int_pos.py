@@ -4,12 +4,11 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
 from django.core.exceptions import ValidationError
-from django.forms import model_to_dict
+from django.forms import model_to_dict, modelform_factory
 from model_mommy.mommy import Mommy
 import pytest
 from fakeapp.models import PositiveIntegerFieldModel
-from strictmodels import MODEL_MOMMY_MAPPING
-
+from strictmodels import MODEL_MOMMY_MAPPING, SafeModelForm
 
 
 def test_StrictPositiveIntegerField_null():
@@ -30,7 +29,41 @@ def test_StrictPositiveIntegerField_mommy():
     mommy.prepare()
     mommy.make()
 
+@pytest.mark.django_db
+def test_StrictPositiveIntegerField_form_with_instance_valid():
+    x = PositiveIntegerFieldModel(field=5)
+    form_class = modelform_factory(model=PositiveIntegerFieldModel, fields=['field'])
+    form = form_class(data={'field': 6}, instance=x)
+    assert form.is_valid() is True
+    assert form.errors == {}
+    obj = form.save()
+    assert obj == x
 
+
+def test_StrictPositiveIntegerField_form_with_instance_invalid():
+    x = PositiveIntegerFieldModel(field=5)
+    form_class = modelform_factory(model=PositiveIntegerFieldModel,
+                                   form=SafeModelForm, fields=['field'])
+    form = form_class(data={'field': -1}, instance=x)
+    assert form.is_valid() is False
+    assert form.errors == {'field': ['Ensure this value is greater than or equal to 0.']}
+
+
+@pytest.mark.django_db
+def test_StrictPositiveIntegerField_form_without_instance_valid():
+    form_class = modelform_factory(model=PositiveIntegerFieldModel, fields=['field'])
+    form = form_class(data={'field': 6})
+    assert form.is_valid() is True
+    assert form.errors == {}
+    assert form.save().field == 6
+
+
+def test_StrictPositiveIntegerField_form_without_instance_invalid():
+    form_class = modelform_factory(model=PositiveIntegerFieldModel,
+                                   form=SafeModelForm, fields=['field'])
+    form = form_class(data={'field': -1})
+    assert form.is_valid() is False
+    assert form.errors == {'field': ['Ensure this value is greater than or equal to 0.']}
 
 def test_StrictPositiveIntegerField_descriptor_doesnt_disappear():
     """

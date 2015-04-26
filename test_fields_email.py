@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from __future__ import division
 from decimal import Decimal
 from django.core.exceptions import ValidationError
-from django.forms import model_to_dict
+from django.forms import model_to_dict, modelform_factory
 from model_mommy.mommy import Mommy
 import pytest
 from fakeapp.models import EmailFieldModel
@@ -14,11 +14,7 @@ from strictmodels import MODEL_MOMMY_MAPPING
 
 
 def test_StrictEmailField_no_args():
-    """
-    If no args, are given: This field cannot be blank.
-    """
-    with pytest.raises(ValidationError):
-        value = EmailFieldModel()
+    value = EmailFieldModel()
 
 
 @pytest.mark.django_db
@@ -36,8 +32,41 @@ def test_StrictEmailField_mommy():
     mommy.make()
 
 
+@pytest.mark.django_db
+def test_StrictEmailField_form_with_instance_valid():
+    x = EmailFieldModel(field='t@t.tt')
+    form_class = modelform_factory(model=EmailFieldModel, fields=['field'])
+    form = form_class(data={'field': 'b@b.bb'}, instance=x)
+    assert form.is_valid() is True
+    assert form.errors == {}
+    assert form.save().field == 'b@b.bb'
 
-def test_StrictBigIntegerField_descriptor_doesnt_disappear():
+
+def test_StrictEmailField_form_with_instance_invalid():
+    x = EmailFieldModel(field='z@z.zz')
+    form_class = modelform_factory(model=EmailFieldModel, fields=['field'])
+    form = form_class(data={'field': 9223372036854775808}, instance=x)
+    assert form.is_valid() is False
+    assert form.errors == {'field': ['Enter a valid email address.']}
+
+
+@pytest.mark.django_db
+def test_StrictEmailField_form_without_instance_valid():
+    form_class = modelform_factory(model=EmailFieldModel, fields=['field'])
+    form = form_class(data={'field': 'c@cc.cc'})
+    assert form.is_valid() is True
+    assert form.errors == {}
+    assert form.save().field == 'c@cc.cc'
+
+
+def test_StrictEmailField_form_without_instance_invalid():
+    form_class = modelform_factory(model=EmailFieldModel, fields=['field'])
+    form = form_class(data={'field': 9223372036854775808})
+    assert form.is_valid() is False
+    assert form.errors == {'field': ['Enter a valid email address.']}
+
+
+def test_StrictEmailField_descriptor_doesnt_disappear():
     """
     don't clobber the descriptor
     """

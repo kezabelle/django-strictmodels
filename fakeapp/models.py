@@ -170,7 +170,7 @@ class SmallIntegerFieldModel(models.Model):
 
 
 class TextFieldModel(models.Model):
-    field = strict.StrictTextField()
+    field = strict.StrictTextField(max_length=100)
 
     def __repr__(self):
         return '<{cls!s} pk={pk!r}, field={field!r}>'.format(

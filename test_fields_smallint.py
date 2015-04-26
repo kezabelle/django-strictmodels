@@ -4,12 +4,11 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
 from django.core.exceptions import ValidationError
-from django.forms import model_to_dict
+from django.forms import model_to_dict, modelform_factory
 from model_mommy.mommy import Mommy
 import pytest
 from fakeapp.models import SmallIntegerFieldModel
-from strictmodels import MODEL_MOMMY_MAPPING
-
+from strictmodels import MODEL_MOMMY_MAPPING, SafeModelForm
 
 
 def test_StrictSmallIntegerField_null():
@@ -38,6 +37,41 @@ def test_StrictSmallIntegerField_mommy():
         # this is OK because it means our mapping works
         pass
 
+
+@pytest.mark.django_db
+def test_StrictSmallIntegerField_form_with_instance_valid():
+    x = SmallIntegerFieldModel(field=5)
+    form_class = modelform_factory(model=SmallIntegerFieldModel, fields=['field'])
+    form = form_class(data={'field': 6}, instance=x)
+    assert form.is_valid() is True
+    assert form.errors == {}
+    assert form.save().field == 6
+
+
+def test_StrictSmallIntegerField_form_with_instance_invalid():
+    x = SmallIntegerFieldModel(field=5)
+    form_class = modelform_factory(model=SmallIntegerFieldModel,
+                                   form=SafeModelForm, fields=['field'])
+    form = form_class(data={'field': 9223372036854775808}, instance=x)
+    assert form.is_valid() is False
+    assert form.errors == {'field': ['Ensure this value is less than or equal to 32767.']}
+
+
+@pytest.mark.django_db
+def test_StrictSmallIntegerField_form_without_instance_valid():
+    form_class = modelform_factory(model=SmallIntegerFieldModel, fields=['field'])
+    form = form_class(data={'field': 6})
+    assert form.is_valid() is True
+    assert form.errors == {}
+    assert form.save().field == 6
+
+
+def test_StrictSmallIntegerField_form_without_instance_invalid():
+    form_class = modelform_factory(model=SmallIntegerFieldModel,
+                                   form=SafeModelForm, fields=['field'])
+    form = form_class(data={'field': 9223372036854775808})
+    assert form.is_valid() is False
+    assert form.errors == {'field': ['Ensure this value is less than or equal to 32767.']}
 
 
 def test_StrictSmallIntegerField_descriptor_doesnt_disappear():
