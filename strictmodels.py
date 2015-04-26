@@ -242,7 +242,7 @@ class StrictSmallIntegerField(fields.SmallIntegerField):
 class StrictTextField(fields.TextField):
     def __init__(self, *args, **kwargs):
         super(StrictTextField, self).__init__(*args, **kwargs)
-        if not self._validators and self.max_length:
+        if self.max_length is not None:
             self.validators.append(MaxLengthValidator(self.max_length))
 
     def to_python(self, value):

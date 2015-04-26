@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from __future__ import division
 from datetime import timedelta
 from django.core.exceptions import ValidationError
-from django.forms import model_to_dict, modelform_factory
+from django.forms.models import model_to_dict, modelform_factory
 from django.utils.datetime_safe import date
 from model_mommy.mommy import Mommy
 import pytest
