@@ -28,7 +28,7 @@ class SafeModelForm(ModelForm):
             # AttributeError: 'ValidationError' object has no attribute 'error_dict'
             # when trying to _update_errors
             errors = {}
-            e.update_error_dict(errors)
+            errors = e.update_error_dict(errors)
             self._update_errors(ValidationError(errors))
 
 
@@ -66,8 +66,8 @@ class FieldCleaningDescriptor(object):
                     # catch and re-raise it as a dict mapping key: exception
                     # so that forms will attribute it to the correct field.
                     raise ValidationError(message={
-                        self.field.name: exc
-                    })
+                        self.field.name: exc.messages,
+                    }, code=getattr(exc, 'code', None))
         instance.__dict__[self.field.name] = new_value
         return new_value
 
