@@ -9,8 +9,7 @@ from django.forms.models import model_to_dict, modelform_factory
 from model_mommy.mommy import Mommy
 import pytest
 from fakeapp.models import TextFieldModel
-from strictmodels import MODEL_MOMMY_MAPPING
-
+from strictmodels import MODEL_MOMMY_MAPPING, SafeModelForm
 
 
 def test_StrictTextField_no_args():
@@ -53,7 +52,8 @@ def test_StrictTextField_form_with_instance_valid():
 @pytest.mark.django_db
 def test_StrictTextField_form_with_instance_invalid():
     x = TextFieldModel(field=5)
-    form_class = modelform_factory(model=TextFieldModel, fields=['field'])
+    form_class = modelform_factory(model=TextFieldModel,
+                                   form=SafeModelForm, fields=['field'])
     form = form_class(data={'field': 't' * 200}, instance=x)
     assert form.is_valid() is False
     assert form.errors == {'field': ['Ensure this value has at most 100 characters (it has 200).']}
@@ -69,7 +69,8 @@ def test_StrictTextField_form_without_instance_valid():
 
 
 def test_StrictTextField_form_without_instance_invalid():
-    form_class = modelform_factory(model=TextFieldModel, fields=['field'])
+    form_class = modelform_factory(model=TextFieldModel,
+                                   form=SafeModelForm, fields=['field'])
     form = form_class(data={'field': 't'*200})
     assert form.is_valid() is False
     assert form.errors == {'field': ['Ensure this value has at most 100 characters (it has 200).']}
