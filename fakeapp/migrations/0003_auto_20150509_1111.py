@@ -8,7 +8,7 @@ import strictmodels
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contenttypes', '0002_remove_content_type_name'),
+        ('contenttypes', '0001_initial'),
         ('fakeapp', '0002_auto_20150423_1710'),
     ]
 
@@ -20,20 +20,32 @@ class Migration(migrations.Migration):
                 ('object_id', strictmodels.StrictPositiveIntegerField()),
                 ('content_type', models.ForeignKey(to='contenttypes.ContentType')),
             ],
+            options={
+            },
+            bases=(models.Model,),
         ),
         migrations.AlterField(
             model_name='BigIntegerFieldModel',
             name='field',
             field=strictmodels.StrictBigIntegerField(),
+            preserve_default=True,
+        ),
+        migrations.AlterField(
+            model_name='EmailFieldModel',
+            name='field',
+            field=strictmodels.StrictEmailField(max_length=75),
+            preserve_default=True,
         ),
         migrations.AlterField(
             model_name='FilePathFieldModel',
             name='field',
             field=strictmodels.StrictFilePathField(path=b'/Users/kez/Virtualenvs/strictmodels/ffs'),
+            preserve_default=True,
         ),
         migrations.AlterField(
             model_name='NullBigIntegerFieldModel',
             name='field',
             field=strictmodels.StrictBigIntegerField(null=True, blank=True),
+            preserve_default=True,
         ),
     ]
