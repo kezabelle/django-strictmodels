@@ -3,9 +3,11 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
-from django.contrib.contenttypes.fields import GenericForeignKey
+try:
+    from django.contrib.contenttypes.fields import GenericForeignKey
+except ImportError:
+    from django.contrib.contenttypes.generic import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.core import validators
 from django.db import models
 import strictmodels as strict
 from django.conf import settings
