@@ -20,6 +20,8 @@ def pytest_configure():
                     }
                 },
             INSTALLED_APPS=(
+                'django.contrib.auth',
+                'django.contrib.contenttypes',
                 'fakeapp',
             ),
             MIDDLEWARE_CLASSES=(),

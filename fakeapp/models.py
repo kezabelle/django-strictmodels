@@ -3,6 +3,8 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.core import validators
 from django.db import models
 import strictmodels as strict
@@ -194,3 +196,9 @@ class URLFieldModel(models.Model):
         return '<{cls!s} pk={pk!r}, field={field!r}>'.format(
             cls=self.__class__.__name__, pk=self.pk, field=self.field,
             )
+
+
+class GFKFieldModel(models.Model):
+    content_type = models.ForeignKey(ContentType)
+    object_id = strict.StrictPositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
